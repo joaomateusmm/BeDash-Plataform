@@ -6,6 +6,7 @@ import {
   LogOut,
   UsersRound,
   Scissors,
+  Briefcase,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,9 +45,9 @@ const items = [
     icon: CalendarDays,
   },
   {
-    title: "Barbeiros",
+    title: "Profissionais",
     url: "/doctors",
-    icon: Scissors,
+    icon: Briefcase,
   },
   {
     title: "Clientes",
@@ -69,6 +70,14 @@ export function AppSidebar() {
       },
     });
   };
+
+  // Gerar iniciais do nome da clínica
+  const clinicInitials = session.data?.user?.clinic?.name
+    ?.split(" ")
+    .map((name) => name[0])
+    .join("")
+    .toUpperCase() || "";
+
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4">
@@ -100,7 +109,9 @@ export function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
                   <Avatar>
-                    <AvatarFallback>F</AvatarFallback>
+                    <AvatarFallback className="drop-shadow-md">
+                      {clinicInitials}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="text-sm">
