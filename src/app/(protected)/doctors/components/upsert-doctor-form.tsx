@@ -190,7 +190,7 @@ const UpsertDoctorForm = ({
             name="appointmentPrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Média Salarial</FormLabel>
+                <FormLabel>Valor do Serviço</FormLabel>
                 <NumericFormat
                   value={field.value}
                   onValueChange={(value) => {

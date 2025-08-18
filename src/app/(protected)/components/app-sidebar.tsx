@@ -5,7 +5,6 @@ import {
   LayoutDashboard,
   LogOut,
   UsersRound,
-  Scissors,
   Briefcase,
 } from "lucide-react";
 import Image from "next/image";
@@ -72,25 +71,42 @@ export function AppSidebar() {
   };
 
   // Gerar iniciais do nome da clínica
-  const clinicInitials = session.data?.user?.clinic?.name
-    ?.split(" ")
-    .map((name) => name[0])
-    .join("")
-    .toUpperCase() || "";
+  const clinicInitials =
+    session.data?.user?.clinic?.name
+      ?.split(" ")
+      .map((name) => name[0])
+      .join("")
+      .toUpperCase() || "";
 
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4">
-        <Image src="/logolight.svg" alt="Doutor Agenda" width={136} height={28} />
+        <Image
+          onClick={() => router.push("/dashboard")}
+          className="cursor-pointer"
+          src="/logolight.svg"
+          alt="Be.Dash"
+          width={136}
+          height={28}
+        />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-muted-foreground my-2 text-sm font-normal opacity-70">
+            Menu Principal
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url}>
+                <SidebarMenuItem
+                  className="text-muted-foreground py-1 text-sm font-medium"
+                  key={item.title}
+                >
+                  <SidebarMenuButton
+                    className="py-2 duration-300"
+                    asChild
+                    isActive={pathname === item.url}
+                  >
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -114,7 +130,7 @@ export function AppSidebar() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm">
+                    <p className="text-muted-foreground text-sm">
                       {session.data?.user?.clinic?.name}
                     </p>
                     <p className="text-muted-foreground text-sm">

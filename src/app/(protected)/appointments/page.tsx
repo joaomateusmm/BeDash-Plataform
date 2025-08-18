@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { DataTable } from "@/components/ui/data-table";
+import { PageBreadcrumb } from "@/components/page-breadcrumb";
 import {
   PageActions,
   PageContainer,
@@ -17,8 +17,7 @@ import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import AddAppointmentButton from "./components/add-appointment-button";
-import { appointmentsTableColumns } from "./components/table-columns";
-import { PageBreadcrumb } from "@/components/page-breadcrumb";
+import AppointmentsDataTable from "./components/appointments-data-table";
 
 const AppointmentsPage = async () => {
   const session = await auth.api.getSession({
@@ -62,7 +61,11 @@ const AppointmentsPage = async () => {
         </PageActions>
       </PageHeader>
       <PageContent>
-        <DataTable data={appointments} columns={appointmentsTableColumns} />
+        <AppointmentsDataTable
+          appointments={appointments}
+          patients={patients}
+          doctors={doctors}
+        />
       </PageContent>
     </PageContainer>
   );

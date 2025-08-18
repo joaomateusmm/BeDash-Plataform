@@ -1,6 +1,5 @@
 export enum BarberSpecialty {
   BARBEIRO = "Barbeiro",
-  CABELEIREIRO = "Cabeleireiro",
   COLORISTA = "Colorista",
   MANICURE = "Manicure",
   PEDICURE = "Pedicure",

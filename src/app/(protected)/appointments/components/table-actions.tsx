@@ -1,7 +1,8 @@
 "use client";
 
-import { MoreVerticalIcon, TrashIcon } from "lucide-react";
+import { MoreVerticalIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { deleteAppointment } from "@/actions/delete-appointment";
@@ -17,6 +18,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +27,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { appointmentsTable } from "@/db/schema";
+import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
+
+import EditAppointmentForm from "./edit-appointment-form";
 
 type AppointmentWithRelations = typeof appointmentsTable.$inferSelect & {
   patient: {
@@ -44,11 +48,16 @@ type AppointmentWithRelations = typeof appointmentsTable.$inferSelect & {
 
 interface AppointmentsTableActionsProps {
   appointment: AppointmentWithRelations;
+  patients: (typeof patientsTable.$inferSelect)[];
+  doctors: (typeof doctorsTable.$inferSelect)[];
 }
 
 const AppointmentsTableActions = ({
   appointment,
+  patients,
+  doctors,
 }: AppointmentsTableActionsProps) => {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const deleteAppointmentAction = useAction(deleteAppointment, {
     onSuccess: () => {
       toast.success("Agendamento deletado com sucesso.");
@@ -73,6 +82,20 @@ const AppointmentsTableActions = ({
       <DropdownMenuContent>
         <DropdownMenuLabel>{appointment.patient.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogTrigger asChild>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <PencilIcon />
+              Editar
+            </DropdownMenuItem>
+          </DialogTrigger>
+          <EditAppointmentForm
+            appointment={appointment}
+            patients={patients}
+            doctors={doctors}
+            onSuccess={() => setIsEditDialogOpen(false)}
+          />
+        </Dialog>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>

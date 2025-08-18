@@ -33,8 +33,8 @@ const PatientsPage = async () => {
     where: eq(patientsTable.clinicId, session.user.clinic.id),
   });
   return (
-    <PageContainer>
-      <PageBreadcrumb />
+    <  PageContainer>
+    <PageBreadcrumb />
       <PageHeader>
         <PageHeaderContent>
           <PageTitle>Clientes</PageTitle>
@@ -47,7 +47,6 @@ const PatientsPage = async () => {
           <AddPatientButton />
         </PageActions>
       </PageHeader>
-
       <PageContent>
         <DataTable data={patients} columns={patientsTableColumns} />
       </PageContent>
