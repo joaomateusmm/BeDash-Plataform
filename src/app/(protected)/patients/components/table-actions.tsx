@@ -76,11 +76,11 @@ const PatientsTableActions = ({ patient }: PatientsTableActionsProps) => {
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    Tem certeza que deseja deletar esse paciente?
+                    Tem certeza que deseja deletar esse cliente?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     Essa ação não pode ser revertida. Isso irá deletar o
-                    paciente e todas as consultas agendadas.
+                    cliente e todas as consultas agendadas.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

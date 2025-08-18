@@ -43,9 +43,11 @@ export const addAppointment = actionClient
       .toDate();
 
     await db.insert(appointmentsTable).values({
-      ...parsedInput,
+      patientId: parsedInput.patientId,
+      doctorId: parsedInput.doctorId,
       clinicId: session?.user.clinic?.id,
       date: appointmentDateTime,
+      priceInCents: parsedInput.appointmentPriceInCents,
     });
 
     revalidatePath("/appointments");

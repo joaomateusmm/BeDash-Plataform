@@ -8,9 +8,12 @@ import * as schema from "@/db/schema";
 import { usersToClinicsTable } from "@/db/schema";
 
 export const auth = betterAuth({
+  telemetry: {
+    enabled: false,
+  },
   database: drizzleAdapter(db, {
     provider: "pg",
-    usePlural: true,
+    usePlural: false,
     schema,
   }),
   socialProviders: {
