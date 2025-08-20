@@ -4,14 +4,14 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
-import { patientsTable } from "@/db/schema";
+import { clientesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-import { upsertPatientSchema } from "./schema";
+import { upsertclienteschema } from "./schema";
 
 export const upsertPatient = actionClient
-  .schema(upsertPatientSchema)
+  .schema(upsertclienteschema)
   .action(async ({ parsedInput }) => {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -24,17 +24,17 @@ export const upsertPatient = actionClient
     }
 
     await db
-      .insert(patientsTable)
+      .insert(clientesTable)
       .values({
         ...parsedInput,
         id: parsedInput.id,
         clinicId: session?.user.clinic?.id,
       })
       .onConflictDoUpdate({
-        target: [patientsTable.id],
+        target: [clientesTable.id],
         set: {
           ...parsedInput,
         },
       });
-    revalidatePath("/patients");
+    revalidatePath("/clientes");
   });

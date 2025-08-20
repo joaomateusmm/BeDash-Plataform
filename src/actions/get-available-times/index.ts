@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { appointmentsTable, doctorsTable } from "@/db/schema";
+import { appointmentsTable, profissionaisTable } from "@/db/schema";
 import { generateTimeSlots } from "@/helpers/time";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
@@ -33,8 +33,8 @@ export const getAvailableTimes = actionClient
     if (!session.user.clinic) {
       throw new Error("Clínica não encontrada");
     }
-    const doctor = await db.query.doctorsTable.findFirst({
-      where: eq(doctorsTable.id, parsedInput.doctorId),
+    const doctor = await db.query.profissionaisTable.findFirst({
+      where: eq(profissionaisTable.id, parsedInput.doctorId),
     });
     if (!doctor) {
       throw new Error("Médico não encontrado");

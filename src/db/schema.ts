@@ -10,12 +10,29 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
+// Enum para planos de assinatura
+export const planEnum = pgEnum("plan_type", [
+  "essential_trial",
+  "essential",
+  "professional",
+  "enterprise",
+]);
+
 export const usersTable = pgTable("users", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  plan: planEnum("plan"),
+
+  // Campos para sistema de trial
+  isInTrial: boolean("is_in_trial").default(false),
+  trialStartDate: timestamp("trial_start_date"),
+  trialEndDate: timestamp("trial_end_date"),
+
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
@@ -101,13 +118,28 @@ export const usersToClinicsTableRelations = relations(
 );
 
 export const clinicsTableRelations = relations(clinicsTable, ({ many }) => ({
-  doctors: many(doctorsTable),
-  patients: many(patientsTable),
+  profissionais: many(profissionaisTable),
+  clientes: many(clientesTable),
   appointments: many(appointmentsTable),
   usersToClinics: many(usersToClinicsTable),
+  funcoes: many(funcoesTable),
 }));
 
-export const doctorsTable = pgTable("doctors", {
+// Tabela de funções
+export const funcoesTable = pgTable("funcoes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  clinicId: uuid("clinic_id")
+    .notNull()
+    .references(() => clinicsTable.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export const profissionaisTable = pgTable("profissionais", {
   id: uuid("id").defaultRandom().primaryKey(),
   clinicId: uuid("clinic_id")
     .notNull()
@@ -119,7 +151,6 @@ export const doctorsTable = pgTable("doctors", {
   availableToWeekDay: integer("available_to_week_day").notNull(),
   availableFromTime: time("available_from_time").notNull(),
   availableToTime: time("available_to_time").notNull(),
-  specialty: text("specialty").notNull(),
   appointmentPriceInCents: integer("appointment_price_in_cents").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
@@ -127,20 +158,57 @@ export const doctorsTable = pgTable("doctors", {
     .$onUpdate(() => new Date()),
 });
 
-export const doctorsTableRelations = relations(
-  doctorsTable,
-  ({ many, one }) => ({
+// Tabela de relacionamento entre profissionais e funções (many-to-many)
+export const profissionaisToFuncoesTable = pgTable("profissionais_to_funcoes", {
+  profissionalId: uuid("profissional_id")
+    .notNull()
+    .references(() => profissionaisTable.id, { onDelete: "cascade" }),
+  funcaoId: uuid("funcao_id")
+    .notNull()
+    .references(() => funcoesTable.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const funcoesTableRelations = relations(
+  funcoesTable,
+  ({ one, many }) => ({
     clinic: one(clinicsTable, {
-      fields: [doctorsTable.clinicId],
+      fields: [funcoesTable.clinicId],
       references: [clinicsTable.id],
     }),
-    appointments: many(appointmentsTable),
+    profissionaisToFuncoes: many(profissionaisToFuncoesTable),
   }),
 );
 
-export const patientSexEnum = pgEnum("patient_sex", ["male", "female"]);
+export const profissionaisTableRelations = relations(
+  profissionaisTable,
+  ({ many, one }) => ({
+    clinic: one(clinicsTable, {
+      fields: [profissionaisTable.clinicId],
+      references: [clinicsTable.id],
+    }),
+    appointments: many(appointmentsTable),
+    profissionaisToFuncoes: many(profissionaisToFuncoesTable),
+  }),
+);
 
-export const patientsTable = pgTable("patients", {
+export const profissionaisToFuncoesTableRelations = relations(
+  profissionaisToFuncoesTable,
+  ({ one }) => ({
+    profissional: one(profissionaisTable, {
+      fields: [profissionaisToFuncoesTable.profissionalId],
+      references: [profissionaisTable.id],
+    }),
+    funcao: one(funcoesTable, {
+      fields: [profissionaisToFuncoesTable.funcaoId],
+      references: [funcoesTable.id],
+    }),
+  }),
+);
+
+export const clientesexEnum = pgEnum("patient_sex", ["male", "female"]);
+
+export const clientesTable = pgTable("clientes", {
   id: uuid("id").defaultRandom().primaryKey(),
   clinicId: uuid("clinic_id")
     .notNull()
@@ -149,17 +217,17 @@ export const patientsTable = pgTable("patients", {
   email: text("email").notNull(),
   phoneNumber: text("phone_number").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  sex: patientSexEnum("sex").notNull(),
+  sex: clientesexEnum("sex").notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date()),
 });
 
-export const patientsTableRelations = relations(
-  patientsTable,
+export const clientesTableRelations = relations(
+  clientesTable,
   ({ one, many }) => ({
     clinic: one(clinicsTable, {
-      fields: [patientsTable.clinicId],
+      fields: [clientesTable.clinicId],
       references: [clinicsTable.id],
     }),
     appointments: many(appointmentsTable),
@@ -175,10 +243,10 @@ export const appointmentsTable = pgTable("appointments", {
     .references(() => clinicsTable.id, { onDelete: "cascade" }),
   patientId: uuid("patient_id")
     .notNull()
-    .references(() => patientsTable.id, { onDelete: "cascade" }),
+    .references(() => clientesTable.id, { onDelete: "cascade" }),
   doctorId: uuid("doctor_id")
     .notNull()
-    .references(() => doctorsTable.id, { onDelete: "cascade" }),
+    .references(() => profissionaisTable.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -192,13 +260,13 @@ export const appointmentsTableRelations = relations(
       fields: [appointmentsTable.clinicId],
       references: [clinicsTable.id],
     }),
-    patient: one(patientsTable, {
+    patient: one(clientesTable, {
       fields: [appointmentsTable.patientId],
-      references: [patientsTable.id],
+      references: [clientesTable.id],
     }),
-    doctor: one(doctorsTable, {
+    doctor: one(profissionaisTable, {
       fields: [appointmentsTable.doctorId],
-      references: [doctorsTable.id],
+      references: [profissionaisTable.id],
     }),
   }),
 );

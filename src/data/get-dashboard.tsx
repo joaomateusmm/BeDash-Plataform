@@ -2,30 +2,30 @@ import dayjs from "dayjs";
 import { and, count, desc, eq, gte, lte, sql, sum } from "drizzle-orm";
 
 import { db } from "@/db";
-import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
+import {
+  appointmentsTable,
+  profissionaisTable,
+  clientesTable,
+  funcoesTable,
+  profissionaisToFuncoesTable,
+} from "@/db/schema";
 
 interface Params {
   from: string;
   to: string;
-  session: {
-    user: {
-      clinic: {
-        id: string;
-      };
-    };
-  };
+  clinicId: string;
 }
 
-export const getDashboard = async ({ from, to, session }: Params) => {
+export const getDashboard = async ({ from, to, clinicId }: Params) => {
   const chartStartDate = dayjs().subtract(10, "days").startOf("day").toDate();
   const chartEndDate = dayjs().add(10, "days").endOf("day").toDate();
   const [
     [totalRevenue],
     [totalAppointments],
-    [totalPatients],
-    [totalDoctors],
-    topDoctors,
-    topSpecialties,
+    [totalclientes],
+    [totalprofissionais],
+    topprofissionais,
+    topFuncoes,
     todayAppointments,
     dailyAppointmentsData,
   ] = await Promise.all([
@@ -36,7 +36,7 @@ export const getDashboard = async ({ from, to, session }: Params) => {
       .from(appointmentsTable)
       .where(
         and(
-          eq(appointmentsTable.clinicId, session.user.clinic.id),
+          eq(appointmentsTable.clinicId, clinicId),
           gte(appointmentsTable.date, new Date(from)),
           lte(appointmentsTable.date, new Date(to)),
         ),
@@ -48,7 +48,7 @@ export const getDashboard = async ({ from, to, session }: Params) => {
       .from(appointmentsTable)
       .where(
         and(
-          eq(appointmentsTable.clinicId, session.user.clinic.id),
+          eq(appointmentsTable.clinicId, clinicId),
           gte(appointmentsTable.date, new Date(from)),
           lte(appointmentsTable.date, new Date(to)),
         ),
@@ -57,54 +57,64 @@ export const getDashboard = async ({ from, to, session }: Params) => {
       .select({
         total: count(),
       })
-      .from(patientsTable)
-      .where(eq(patientsTable.clinicId, session.user.clinic.id)),
+      .from(clientesTable)
+      .where(eq(clientesTable.clinicId, clinicId)),
     db
       .select({
         total: count(),
       })
-      .from(doctorsTable)
-      .where(eq(doctorsTable.clinicId, session.user.clinic.id)),
+      .from(profissionaisTable)
+      .where(eq(profissionaisTable.clinicId, clinicId)),
     db
       .select({
-        id: doctorsTable.id,
-        name: doctorsTable.name,
-        avatarImageUrl: doctorsTable.avatarImageUrl,
-        specialty: doctorsTable.specialty,
+        id: profissionaisTable.id,
+        name: profissionaisTable.name,
+        avatarImageUrl: profissionaisTable.avatarImageUrl,
         appointments: count(appointmentsTable.id),
       })
-      .from(doctorsTable)
+      .from(profissionaisTable)
       .leftJoin(
         appointmentsTable,
         and(
-          eq(appointmentsTable.doctorId, doctorsTable.id),
+          eq(appointmentsTable.doctorId, profissionaisTable.id),
           gte(appointmentsTable.date, new Date(from)),
           lte(appointmentsTable.date, new Date(to)),
         ),
       )
-      .where(eq(doctorsTable.clinicId, session.user.clinic.id))
-      .groupBy(doctorsTable.id)
+      .where(eq(profissionaisTable.clinicId, clinicId))
+      .groupBy(profissionaisTable.id)
       .orderBy(desc(count(appointmentsTable.id)))
       .limit(10),
     db
       .select({
-        specialty: doctorsTable.specialty,
+        funcao: funcoesTable.name,
         appointments: count(appointmentsTable.id),
       })
       .from(appointmentsTable)
-      .innerJoin(doctorsTable, eq(appointmentsTable.doctorId, doctorsTable.id))
+      .innerJoin(
+        profissionaisTable,
+        eq(appointmentsTable.doctorId, profissionaisTable.id),
+      )
+      .innerJoin(
+        profissionaisToFuncoesTable,
+        eq(profissionaisToFuncoesTable.profissionalId, profissionaisTable.id),
+      )
+      .innerJoin(
+        funcoesTable,
+        eq(funcoesTable.id, profissionaisToFuncoesTable.funcaoId),
+      )
       .where(
         and(
-          eq(appointmentsTable.clinicId, session.user.clinic.id),
+          eq(appointmentsTable.clinicId, clinicId),
           gte(appointmentsTable.date, new Date(from)),
           lte(appointmentsTable.date, new Date(to)),
         ),
       )
-      .groupBy(doctorsTable.specialty)
+      .groupBy(funcoesTable.name)
       .orderBy(desc(count(appointmentsTable.id))),
     db.query.appointmentsTable.findMany({
       where: and(
-        eq(appointmentsTable.clinicId, session.user.clinic.id),
+        eq(appointmentsTable.clinicId, clinicId),
         gte(appointmentsTable.date, new Date()),
         lte(appointmentsTable.date, new Date()),
       ),
@@ -125,7 +135,7 @@ export const getDashboard = async ({ from, to, session }: Params) => {
       .from(appointmentsTable)
       .where(
         and(
-          eq(appointmentsTable.clinicId, session.user.clinic.id),
+          eq(appointmentsTable.clinicId, clinicId),
           gte(appointmentsTable.date, chartStartDate),
           lte(appointmentsTable.date, chartEndDate),
         ),
@@ -136,10 +146,10 @@ export const getDashboard = async ({ from, to, session }: Params) => {
   return {
     totalRevenue,
     totalAppointments,
-    totalPatients,
-    totalDoctors,
-    topDoctors,
-    topSpecialties,
+    totalclientes,
+    totalprofissionais,
+    topprofissionais,
+    topFuncoes,
     todayAppointments,
     dailyAppointmentsData,
   };

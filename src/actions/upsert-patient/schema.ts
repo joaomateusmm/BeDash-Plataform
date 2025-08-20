@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const upsertPatientSchema = z.object({
+export const upsertclienteschema = z.object({
   id: z.string().uuid().optional(),
   name: z.string().trim().min(1, {
     message: "Nome é obrigatório.",
@@ -16,4 +16,4 @@ export const upsertPatientSchema = z.object({
   }),
 });
 
-export type UpsertPatientSchema = z.infer<typeof upsertPatientSchema>;
+export type Upsertclienteschema = z.infer<typeof upsertclienteschema>;

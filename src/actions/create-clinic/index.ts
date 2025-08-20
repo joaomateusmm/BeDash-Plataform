@@ -19,5 +19,7 @@ export const createClinic = async (name: string) => {
     userId: session.user.id,
     clinicId: clinic.id,
   });
-  redirect("/dashboard");
+
+  // Redireciona para o dashboard da nova empresa criada
+  redirect(`/${clinic.id}/dashboard`);
 };

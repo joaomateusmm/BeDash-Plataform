@@ -4,32 +4,22 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { doctorsTable } from "@/db/schema";
+import { profissionaisTable, profissionaisToFuncoesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
+import { localTimeToUtc } from "@/helpers/timezone";
 
-import { upsertDoctorSchema } from "./schema";
+import { upsertprofissionaischema } from "./schema";
 
 dayjs.extend(utc);
 
 export const upsertDoctor = actionClient
-  .schema(upsertDoctorSchema)
+  .schema(upsertprofissionaischema)
   .action(async ({ parsedInput }) => {
-    const availableFromTime = parsedInput.availableFromTime; // 15:30:00
-    const availableToTime = parsedInput.availableToTime; // 16:00:00
-
-    const availableFromTimeUTC = dayjs()
-      .set("hour", parseInt(availableFromTime.split(":")[0]))
-      .set("minute", parseInt(availableFromTime.split(":")[1]))
-      .set("second", parseInt(availableFromTime.split(":")[2]))
-      .utc();
-    const availableToTimeUTC = dayjs()
-      .set("hour", parseInt(availableToTime.split(":")[0]))
-      .set("minute", parseInt(availableToTime.split(":")[1]))
-      .set("second", parseInt(availableToTime.split(":")[2]))
-      .utc();
+    const { funcoes, ...profissionalData } = parsedInput;
 
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -40,22 +30,54 @@ export const upsertDoctor = actionClient
     if (!session?.user.clinic?.id) {
       throw new Error("Clinic not found");
     }
-    await db
-      .insert(doctorsTable)
-      .values({
-        ...parsedInput,
-        id: parsedInput.id,
-        clinicId: session?.user.clinic?.id,
-        availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
-        availableToTime: availableToTimeUTC.format("HH:mm:ss"),
-      })
-      .onConflictDoUpdate({
-        target: [doctorsTable.id],
-        set: {
-          ...parsedInput,
-          availableFromTime: availableFromTimeUTC.format("HH:mm:ss"),
-          availableToTime: availableToTimeUTC.format("HH:mm:ss"),
-        },
-      });
-    revalidatePath("/doctors");
+
+    // Converter horários locais para UTC para salvar no banco
+    const availableFromTimeUTC = localTimeToUtc(
+      profissionalData.availableFromTime,
+    );
+    const availableToTimeUTC = localTimeToUtc(profissionalData.availableToTime);
+
+    const profissionalDataToSave = {
+      ...profissionalData,
+      clinicId: session?.user.clinic?.id,
+      availableFromTime: availableFromTimeUTC,
+      availableToTime: availableToTimeUTC,
+    };
+
+    let profissionalId: string;
+
+    if (profissionalData.id) {
+      // Atualizar profissional existente
+      await db
+        .update(profissionaisTable)
+        .set(profissionalDataToSave)
+        .where(eq(profissionaisTable.id, profissionalData.id));
+
+      profissionalId = profissionalData.id;
+
+      // Remover funções existentes
+      await db
+        .delete(profissionaisToFuncoesTable)
+        .where(eq(profissionaisToFuncoesTable.profissionalId, profissionalId));
+    } else {
+      // Criar novo profissional
+      const [newProfissional] = await db
+        .insert(profissionaisTable)
+        .values(profissionalDataToSave)
+        .returning({ id: profissionaisTable.id });
+
+      profissionalId = newProfissional.id;
+    }
+
+    // Inserir novas funções
+    if (funcoes.length > 0) {
+      await db.insert(profissionaisToFuncoesTable).values(
+        funcoes.map((funcaoId) => ({
+          profissionalId,
+          funcaoId,
+        })),
+      );
+    }
+
+    revalidatePath("/profissionais");
   });

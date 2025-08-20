@@ -208,8 +208,7 @@ export function DataTable<TData, TValue>({
     const columnId = column.id.toLowerCase();
     return (
       columnId.includes("name") ||
-      columnId.includes("email") ||
-      columnId.includes("specialty")
+      columnId.includes("email")
     );
   });
 

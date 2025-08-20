@@ -174,10 +174,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "appointments_patient_id_patients_id_fk": {
-          "name": "appointments_patient_id_patients_id_fk",
+        "appointments_patient_id_clientes_id_fk": {
+          "name": "appointments_patient_id_clientes_id_fk",
           "tableFrom": "appointments",
-          "tableTo": "patients",
+          "tableTo": "clientes",
           "columnsFrom": [
             "patient_id"
           ],
@@ -187,10 +187,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "appointments_doctor_id_doctors_id_fk": {
-          "name": "appointments_doctor_id_doctors_id_fk",
+        "appointments_doctor_id_profissionais_id_fk": {
+          "name": "appointments_doctor_id_profissionais_id_fk",
           "tableFrom": "appointments",
-          "tableTo": "doctors",
+          "tableTo": "profissionais",
           "columnsFrom": [
             "doctor_id"
           ],
@@ -247,8 +247,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.doctors": {
-      "name": "doctors",
+    "public.profissionais": {
+      "name": "profissionais",
       "schema": "",
       "columns": {
         "id": {
@@ -329,9 +329,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "doctors_clinic_id_clinics_id_fk": {
-          "name": "doctors_clinic_id_clinics_id_fk",
-          "tableFrom": "doctors",
+        "profissionais_clinic_id_clinics_id_fk": {
+          "name": "profissionais_clinic_id_clinics_id_fk",
+          "tableFrom": "profissionais",
           "tableTo": "clinics",
           "columnsFrom": [
             "clinic_id"
@@ -349,8 +349,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.patients": {
-      "name": "patients",
+    "public.clientes": {
+      "name": "clientes",
       "schema": "",
       "columns": {
         "id": {
@@ -408,9 +408,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "patients_clinic_id_clinics_id_fk": {
-          "name": "patients_clinic_id_clinics_id_fk",
-          "tableFrom": "patients",
+        "clientes_clinic_id_clinics_id_fk": {
+          "name": "clientes_clinic_id_clinics_id_fk",
+          "tableFrom": "clientes",
           "tableTo": "clinics",
           "columnsFrom": [
             "clinic_id"

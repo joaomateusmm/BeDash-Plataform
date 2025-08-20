@@ -1,14 +1,21 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/app/(protected)/components/app-sidebar"
+import { PropsWithChildren } from "react";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="w-full">
-        <SidebarTrigger />
-        {children}
-      </main>
-    </SidebarProvider>
-  )
+import { auth } from "@/lib/auth";
+import { setupUserTrial } from "@/actions/setup-user-trial";
+
+export default async function ProtectedLayout({ children }: PropsWithChildren) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/authentication");
+  }
+
+  // Configurar trial automaticamente para usuários novos
+  await setupUserTrial();
+
+  return <>{children}</>;
 }

@@ -15,6 +15,20 @@
       "when": 1755527791391,
       "tag": "0001_amusing_archangel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1755573404298,
+      "tag": "0002_spooky_menace",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1755635077401,
+      "tag": "0003_majestic_morgan_stark",
+      "breakpoints": true
     }
   ]
 }

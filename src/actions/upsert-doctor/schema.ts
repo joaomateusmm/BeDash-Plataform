@@ -1,13 +1,13 @@
 import { z } from "zod";
 
-export const upsertDoctorSchema = z
+export const upsertprofissionaischema = z
   .object({
     id: z.string().uuid().optional(),
     name: z.string().trim().min(1, {
       message: "Nome é obrigatório.",
     }),
-    specialty: z.string().trim().min(1, {
-      message: "Especialidade é obrigatória.",
+    funcoes: z.array(z.string().uuid()).min(1, {
+      message: "Pelo menos uma função deve ser selecionada.",
     }),
     appointmentPriceInCents: z.number().min(1, {
       message: "Preço da consulta é obrigatório.",
@@ -32,4 +32,4 @@ export const upsertDoctorSchema = z
     },
   );
 
-export type UpsertDoctorSchema = z.infer<typeof upsertDoctorSchema>;
+export type Upsertprofissionaischema = z.infer<typeof upsertprofissionaischema>;

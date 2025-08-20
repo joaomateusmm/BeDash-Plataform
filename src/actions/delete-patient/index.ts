@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { patientsTable } from "@/db/schema";
+import { clientesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
@@ -23,8 +23,8 @@ export const deletePatient = actionClient
     if (!session?.user) {
       throw new Error("Unauthorized");
     }
-    const patient = await db.query.patientsTable.findFirst({
-      where: eq(patientsTable.id, parsedInput.id),
+    const patient = await db.query.clientesTable.findFirst({
+      where: eq(clientesTable.id, parsedInput.id),
     });
     if (!patient) {
       throw new Error("Paciente não encontrado");
@@ -32,6 +32,6 @@ export const deletePatient = actionClient
     if (patient.clinicId !== session.user.clinic?.id) {
       throw new Error("Paciente não encontrado");
     }
-    await db.delete(patientsTable).where(eq(patientsTable.id, parsedInput.id));
-    revalidatePath("/patients");
+    await db.delete(clientesTable).where(eq(clientesTable.id, parsedInput.id));
+    revalidatePath("/clientes");
   });
