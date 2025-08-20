@@ -212,9 +212,11 @@ export function AppSidebar() {
                   className="text-muted-foreground flex flex-row-reverse items-center gap-5 py-0 text-sm font-medium"
                   key={item.title}
                 >
-                  <BadgeBeta />
+                  <div>
+                    <BadgeBeta />
+                  </div>
                   <SidebarMenuButton
-                    className="py-2 whitespace-nowrap duration-300"
+                    className="cursor-default py-2 whitespace-nowrap duration-300"
                     asChild
                     isActive={pathname.includes(item.url)}
                   >
@@ -239,7 +241,9 @@ export function AppSidebar() {
                   className="text-muted-foreground flex flex-row-reverse items-center gap-5 py-0 text-sm font-medium"
                   key={item.title}
                 >
-                  <BadgeNew />
+                  <div>
+                    <BadgeNew />
+                  </div>
                   <SidebarMenuButton
                     className="py-2 duration-300"
                     asChild
@@ -266,6 +270,9 @@ export function AppSidebar() {
                   className="text-muted-foreground flex flex-row-reverse items-center gap-5 py-1 text-sm font-medium"
                   key={item.title}
                 >
+                  <div>
+                    <BadgeNew />
+                  </div>
                   <SidebarMenuButton
                     className="py-2 duration-300"
                     asChild

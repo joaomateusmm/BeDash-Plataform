@@ -39,12 +39,13 @@ const formSchema = z.object({
   name: z.string().trim().min(1, {
     message: "Nome é obrigatório.",
   }),
-  email: z.string().email({
-    message: "Email inválido.",
-  }),
-  phoneNumber: z.string().trim().min(1, {
-    message: "Número de telefone é obrigatório.",
-  }),
+  email: z
+    .string()
+    .email({
+      message: "Email inválido.",
+    })
+    .or(z.literal("")),
+  phoneNumber: z.string(),
   sex: z.enum(["male", "female"], {
     message: "Sexo é obrigatório.",
   }),
@@ -83,8 +84,10 @@ const UpsertPatientForm = ({
       toast.success("Cliente salvo com sucesso.");
       onSuccess?.();
     },
-    onError: () => {
-      toast.error("Erro ao salvar cliente.");
+    onError: ({ error }) => {
+      // A mensagem de erro personalizada vem no serverError
+      const errorMessage = error.serverError || "Erro ao salvar cliente.";
+      toast.error(errorMessage);
     },
   });
 
@@ -130,7 +133,12 @@ const UpsertPatientForm = ({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>
+                  Email{" "}
+                  <a className="text-muted-foreground">
+                    (opcional mas importante)
+                  </a>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -147,7 +155,12 @@ const UpsertPatientForm = ({
             name="phoneNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Número de telefone</FormLabel>
+                <FormLabel>
+                  Número de telefone{" "}
+                  <a className="text-muted-foreground">
+                    (opcional mas importante)
+                  </a>
+                </FormLabel>
                 <FormControl>
                   <PatternFormat
                     format="(##) #####-####"

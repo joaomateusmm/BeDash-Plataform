@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { eq } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 
 import { db } from "@/db";
 import { profissionaisTable, profissionaisToFuncoesTable } from "@/db/schema";
@@ -29,6 +29,22 @@ export const upsertDoctor = actionClient
     }
     if (!session?.user.clinic?.id) {
       throw new Error("Clinic not found");
+    }
+
+    // Verificar limite de profissionais antes de criar um novo
+    if (!profissionalData.id) {
+      const [currentCount] = await db
+        .select({ count: count() })
+        .from(profissionaisTable)
+        .where(eq(profissionaisTable.clinicId, session.user.clinic.id));
+
+      const maxDoctors = 10; // Limite do plano básico
+
+      if (currentCount.count >= maxDoctors) {
+        throw new Error(
+          `Limite de ${maxDoctors} profissionais atingido. Faça upgrade do seu plano para adicionar mais profissionais.`,
+        );
+      }
     }
 
     // Converter horários locais para UTC para salvar no banco

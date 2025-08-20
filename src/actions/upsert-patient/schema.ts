@@ -5,12 +5,13 @@ export const upsertclienteschema = z.object({
   name: z.string().trim().min(1, {
     message: "Nome é obrigatório.",
   }),
-  email: z.string().email({
-    message: "Email inválido.",
-  }),
-  phoneNumber: z.string().trim().min(1, {
-    message: "Número de telefone é obrigatório.",
-  }),
+  email: z
+    .string()
+    .email({
+      message: "Email inválido.",
+    })
+    .or(z.literal("")),
+  phoneNumber: z.string(),
   sex: z.enum(["male", "female"], {
     error: "Sexo é obrigatório.",
   }),

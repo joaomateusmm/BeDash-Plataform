@@ -1,10 +1,7 @@
 import dayjs from "dayjs";
-import { eq } from "drizzle-orm";
-import { Calendar } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   PageActions,
   PageContainer,
@@ -14,19 +11,18 @@ import {
   PageHeaderContent,
   PageTitle,
 } from "@/components/ui/page-container";
-import { db } from "@/db";
-import { profissionaisTable, clientesTable } from "@/db/schema";
 import { getDashboard } from "@/data/get-dashboard";
 import { auth } from "@/lib/auth";
 
 // Importar componentes do dashboard
-import AppointmentsChart from "./components/appointments-chart";
+import AppointmentsChart from "./components/dashboard-charts/appointments-chart";
 import { DatePicker } from "./components/date-picker";
 import StatsCards from "./components/stats-cards";
-import TodayAppointmentsTable from "./components/today-appointments-table";
 import Topprofissionais from "./components/top-profissionais";
 import TopSpecialties from "./components/top-specialties";
-import { TrialStatus } from "../../components/trial-status";
+import { PageBreadcrumb } from "@/components/page-breadcrumb";
+import { RankingDaysChart } from "./components/ranking-days-chart";
+import { ClientsInteractingChart } from "./components/clients-interacting-chart";
 
 interface DashboardPageProps {
   params: Promise<{
@@ -69,6 +65,7 @@ const DashboardPage = async ({ params, searchParams }: DashboardPageProps) => {
 
   return (
     <PageContainer>
+      <PageBreadcrumb />
       <PageHeader>
         <PageHeaderContent>
           <PageTitle>Dashboard</PageTitle>
@@ -95,7 +92,7 @@ const DashboardPage = async ({ params, searchParams }: DashboardPageProps) => {
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-1">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-1">
             <div className="flex gap-6">
               <Topprofissionais
                 profissionais={dashboardData.topprofissionais}
@@ -103,12 +100,13 @@ const DashboardPage = async ({ params, searchParams }: DashboardPageProps) => {
               <TopSpecialties topFuncoes={dashboardData.topFuncoes} />
             </div>
           </div>
-
-          <TodayAppointmentsTable
-            appointments={dashboardData.todayAppointments}
-            clientes={[]}
-            profissionais={[]}
-          />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-1">
+            <div className="flex gap-6">
+              <ClientsInteractingChart
+                topClientes={dashboardData.topClientes}
+              />
+            </div>
+          </div>
         </div>
       </PageContent>
     </PageContainer>

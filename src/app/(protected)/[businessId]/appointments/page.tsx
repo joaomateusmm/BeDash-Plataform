@@ -58,7 +58,8 @@ const AppointmentsPage = async () => {
         <PageHeaderContent>
           <PageTitle>Agendamentos</PageTitle>
           <PageDescription>
-            Gerencie os agendamentos da sua clínica
+            Gerencie os agendamentos da sua empresa, crie, edite ou exclua os agendamentos.<br>
+            </br> Veja quais são os clientes mais engajados na página de dashboard.
           </PageDescription>
         </PageHeaderContent>
         <PageActions>

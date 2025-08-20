@@ -1,4 +1,8 @@
+"use client";
+
 import { Check, Crown, Star, Zap } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -53,6 +57,9 @@ const plans = [
 ];
 
 export function PlanUpgradeSection() {
+  const params = useParams();
+  const businessId = params.businessId as string;
+
   return (
     <div className="space-y-10">
       <Card className="mb-6">
@@ -123,9 +130,11 @@ export function PlanUpgradeSection() {
           </div>
 
           <div className="mt-2">
-            <Button className="w-full py-6" size="lg">
-              Ver Todos os Planos
-            </Button>
+            <Link href={`/${businessId}/subscription`}>
+              <Button className="w-full py-6" size="lg">
+                Ver Todos os Planos
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

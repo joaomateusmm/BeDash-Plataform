@@ -61,7 +61,10 @@ export const updateBusiness = actionClient
       .where(eq(clinicsTable.id, parsedInput.id))
       .returning();
 
-    revalidatePath("/gerenciar");
+    // Revalidar as páginas que dependem dos dados da empresa
+    revalidatePath(`/${parsedInput.id}/gerenciar`);
+    revalidatePath(`/${parsedInput.id}/dashboard`);
+    revalidatePath("/");
 
     return { success: true, business: updatedBusiness };
   });

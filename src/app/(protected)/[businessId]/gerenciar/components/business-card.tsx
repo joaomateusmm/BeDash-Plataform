@@ -55,9 +55,10 @@ interface BusinessCardProps {
       subscription: string;
     };
   };
+  onBusinessUpdated?: () => void;
 }
 
-const BusinessCard = ({ business }: BusinessCardProps) => {
+const BusinessCard = ({ business, onBusinessUpdated }: BusinessCardProps) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
@@ -65,6 +66,7 @@ const BusinessCard = ({ business }: BusinessCardProps) => {
     onSuccess: () => {
       toast.success("Empresa excluída com sucesso.");
       setShowDeleteDialog(false);
+      onBusinessUpdated?.();
     },
     onError: ({ error }) => {
       toast.error(error.serverError || "Erro ao excluir empresa.");
@@ -228,7 +230,10 @@ const BusinessCard = ({ business }: BusinessCardProps) => {
         <UpsertBusinessForm
           business={business}
           isOpen={showEditDialog}
-          onSuccess={() => setShowEditDialog(false)}
+          onSuccess={() => {
+            setShowEditDialog(false);
+            onBusinessUpdated?.();
+          }}
         />
       </Dialog>
     </>

@@ -124,7 +124,7 @@ export function TrialLimitsProgress({
                     </span>
                   )}
                   {isAtLimit && (
-                    <Badge variant="destructive" className="text-xs">
+                    <Badge className="text-xs bg-gray-800 text-white">
                       Limite
                     </Badge>
                   )}
@@ -142,10 +142,10 @@ export function TrialLimitsProgress({
                 value={percentage}
                 className={`h-2 ${
                   isAtLimit
-                    ? "bg-red-100 [&>div]:bg-red-600"
+                    ? "bg-gray-100 [&>div]:bg-gray-800"
                     : isNearLimit
-                      ? "bg-yellow-100 [&>div]:bg-yellow-500"
-                      : "bg-green-100 [&>div]:bg-green-500"
+                      ? "bg-gray-100 [&>div]:bg-gray-600"
+                      : "bg-gray-100 [&>div]:bg-gray-400"
                 }`}
               />
               {showDetails && (
@@ -165,7 +165,7 @@ export function TrialLimitsProgress({
 
         <div className="border-t pt-2">
           <p className="text-muted-foreground text-xs">
-            Faça upgrade para o plano Professional para ter limites maiores e
+            Faça upgrade para o plano Profissional para ter limites maiores e
             recursos avançados.
           </p>
         </div>

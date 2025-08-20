@@ -39,19 +39,25 @@ export function UpsertFuncaoForm({
     },
   });
 
-  const { execute: executeUpsertFuncao, isExecuting } = useAction(upsertFuncaoAction, {
-    onSuccess: ({ data }) => {
-      toast.success(data?.message || "Função salva com sucesso!");
-      form.reset({
-        name: "",
-        description: "",
-      });
-      onSuccess?.();
+  const { execute: executeUpsertFuncao, isExecuting } = useAction(
+    upsertFuncaoAction,
+    {
+      onSuccess: ({ data }) => {
+        toast.success(data?.message || "Função salva com sucesso!");
+        form.reset({
+          name: "",
+          description: "",
+        });
+        onSuccess?.();
+      },
+      onError: ({ error }) => {
+        // A mensagem de erro personalizada vem no serverError
+        const errorMessage =
+          error.serverError || "Erro inesperado ao salvar função";
+        toast.error(errorMessage);
+      },
     },
-    onError: ({ error }) => {
-      toast.error(error.serverError || "Erro inesperado ao salvar função");
-    },
-  });
+  );
 
   const onSubmit = (values: UpsertFuncaoSchema) => {
     executeUpsertFuncao(values);
@@ -67,10 +73,10 @@ export function UpsertFuncaoForm({
             <FormItem>
               <FormLabel>Nome da Função</FormLabel>
               <FormControl>
-                <Input 
-                  {...field} 
-                  value={field.value || ""} 
-                  placeholder="Ex: Barbeiro, Recepcionista..." 
+                <Input
+                  {...field}
+                  value={field.value || ""}
+                  placeholder="Ex: Barbeiro, Recepcionista..."
                 />
               </FormControl>
               <FormMessage />
@@ -85,10 +91,10 @@ export function UpsertFuncaoForm({
             <FormItem>
               <FormLabel>Descrição (opcional)</FormLabel>
               <FormControl>
-                <Input 
-                  {...field} 
-                  value={field.value || ""} 
-                  placeholder="Breve descrição da função..." 
+                <Input
+                  {...field}
+                  value={field.value || ""}
+                  placeholder="Breve descrição da função..."
                 />
               </FormControl>
               <FormMessage />

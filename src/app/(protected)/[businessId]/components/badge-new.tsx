@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 export function BadgeNew() {
   return (
     <div className="w-full">
-      <Badge className="bg-indigo-400">New</Badge>
+      <Badge className="bg-indigo-400">Novo</Badge>
     </div>
   );
 }

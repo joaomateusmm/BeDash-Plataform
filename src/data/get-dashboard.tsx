@@ -27,8 +27,10 @@ export const getDashboard = async ({ from, to, clinicId }: Params) => {
     [totalprofissionais],
     topprofissionais,
     topFuncoes,
+    topClientes,
     todayAppointments,
     dailyAppointmentsData,
+    weeklyAppointmentsData,
   ] = await Promise.all([
     db
       .select({
@@ -113,6 +115,27 @@ export const getDashboard = async ({ from, to, clinicId }: Params) => {
       )
       .groupBy(funcoesTable.name)
       .orderBy(desc(count(appointmentsTable.id))),
+    db
+      .select({
+        id: clientesTable.id,
+        name: clientesTable.name,
+        email: clientesTable.email,
+        phoneNumber: clientesTable.phoneNumber,
+        appointments: count(appointmentsTable.id),
+      })
+      .from(clientesTable)
+      .leftJoin(
+        appointmentsTable,
+        and(
+          eq(appointmentsTable.patientId, clientesTable.id),
+          gte(appointmentsTable.date, new Date(from)),
+          lte(appointmentsTable.date, new Date(to)),
+        ),
+      )
+      .where(eq(clientesTable.clinicId, clinicId))
+      .groupBy(clientesTable.id)
+      .orderBy(desc(count(appointmentsTable.id)))
+      .limit(15),
     db.query.appointmentsTable.findMany({
       where: and(
         eq(appointmentsTable.clinicId, clinicId),
@@ -143,6 +166,28 @@ export const getDashboard = async ({ from, to, clinicId }: Params) => {
       )
       .groupBy(sql`DATE(${appointmentsTable.date})`)
       .orderBy(sql`DATE(${appointmentsTable.date})`),
+    // Dados por dia da semana
+    db
+      .select({
+        dayOfWeek: sql<number>`EXTRACT(DOW FROM ${appointmentsTable.date})`.as(
+          "dayOfWeek",
+        ), // 0=Domingo, 1=Segunda, etc.
+        appointments: count(appointmentsTable.id),
+        revenue:
+          sql<number>`COALESCE(SUM(${appointmentsTable.priceInCents}), 0)`.as(
+            "revenue",
+          ),
+      })
+      .from(appointmentsTable)
+      .where(
+        and(
+          eq(appointmentsTable.clinicId, clinicId),
+          gte(appointmentsTable.date, new Date(from)),
+          lte(appointmentsTable.date, new Date(to)),
+        ),
+      )
+      .groupBy(sql`EXTRACT(DOW FROM ${appointmentsTable.date})`)
+      .orderBy(sql`EXTRACT(DOW FROM ${appointmentsTable.date})`),
   ]);
   return {
     totalRevenue,
@@ -151,7 +196,9 @@ export const getDashboard = async ({ from, to, clinicId }: Params) => {
     totalprofissionais,
     topprofissionais,
     topFuncoes,
+    topClientes,
     todayAppointments,
     dailyAppointmentsData,
+    weeklyAppointmentsData,
   };
 };

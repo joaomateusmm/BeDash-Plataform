@@ -42,11 +42,11 @@ export function SubscriptionPlan({
     },
   });
   const features = [
-    "Cadastro de até 5 profissionais.",
-    "Agendamentos ilimitados.",
-    "Cadastro de clientes ilimitados.",
-    "Métricas básicas.",
-    "Confirmação manual.",
+    "Cadastro de até 10 profissionais.",
+    "100 Agendamentos por mês.",
+    "100 Clientes por mês.",
+    "Cadastro de até 1 Empresa.",
+    "Campanhas de WhatsApp e Email.",
     "Suporte via e-mail e WhatsApp.",
   ];
 

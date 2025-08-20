@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { eq, count } from "drizzle-orm";
 
 import { db } from "@/db";
 import { clientesTable } from "@/db/schema";
@@ -21,6 +22,22 @@ export const upsertPatient = actionClient
     }
     if (!session?.user.clinic?.id) {
       throw new Error("Clinic not found");
+    }
+
+    // Verificar limite de clientes antes de criar um novo
+    if (!parsedInput.id) {
+      const [currentCount] = await db
+        .select({ count: count() })
+        .from(clientesTable)
+        .where(eq(clientesTable.clinicId, session.user.clinic.id));
+
+      const maxClients = 100; // Limite do plano básico
+
+      if (currentCount.count >= maxClients) {
+        throw new Error(
+          `Limite de ${maxClients} clientes atingido. Faça upgrade do seu plano para adicionar mais clientes.`,
+        );
+      }
     }
 
     await db

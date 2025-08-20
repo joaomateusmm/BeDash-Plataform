@@ -163,8 +163,11 @@ const UpsertDoctorForm = ({
       toast.success("Funcionário adicionado com sucesso.");
       onSuccess?.();
     },
-    onError: () => {
-      toast.error("Erro ao adicionar funcionário.");
+    onError: ({ error }) => {
+      // A mensagem de erro personalizada vem no serverError
+      const errorMessage =
+        error.serverError || "Erro ao adicionar funcionário.";
+      toast.error(errorMessage);
     },
   });
 

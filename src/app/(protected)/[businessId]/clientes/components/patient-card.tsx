@@ -1,6 +1,13 @@
 "use client";
 
-import { EditIcon, Mail, MoreVerticalIcon, Phone, TrashIcon, User } from "lucide-react";
+import {
+  EditIcon,
+  Mail,
+  MoreVerticalIcon,
+  Phone,
+  TrashIcon,
+  User,
+} from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -150,11 +157,31 @@ const PatientCard = ({ patient }: PatientCardProps) => {
       <CardContent className="flex flex-col gap-2">
         <Badge variant="outline">
           <Mail className="mr-1 h-3 w-3" />
-          {patient.email}
+          <span
+            className={
+              patient.email && patient.email.trim() !== ""
+                ? ""
+                : "text-muted-foreground"
+            }
+          >
+            {patient.email && patient.email.trim() !== ""
+              ? patient.email
+              : "(não possui)"}
+          </span>
         </Badge>
         <Badge variant="outline">
           <Phone className="mr-1 h-3 w-3" />
-          {formatPhoneNumber(patient.phoneNumber)}
+          <span
+            className={
+              patient.phoneNumber && patient.phoneNumber.trim() !== ""
+                ? ""
+                : "text-muted-foreground"
+            }
+          >
+            {patient.phoneNumber && patient.phoneNumber.trim() !== ""
+              ? formatPhoneNumber(patient.phoneNumber)
+              : "(não possui)"}
+          </span>
         </Badge>
         <Badge variant="outline">
           <User className="mr-1 h-3 w-3" />

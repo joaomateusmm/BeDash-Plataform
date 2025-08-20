@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { createBusiness } from "@/actions/create-business";
 import { updateBusiness } from "@/actions/update-business";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,15 +28,9 @@ import { Input } from "@/components/ui/input";
 import { clinicsTable } from "@/db/schema";
 
 const formSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, {
-      message: "Nome da empresa é obrigatório.",
-    })
-    .max(100, {
-      message: "Nome da empresa deve ter no máximo 100 caracteres.",
-    }),
+  name: z.string().trim().min(1, {
+    message: "Nome da empresa é obrigatório.",
+  }),
 });
 
 interface UpsertBusinessFormProps {
@@ -61,22 +54,11 @@ const UpsertBusinessForm = ({
 
   useEffect(() => {
     if (isOpen) {
-      form.reset({
-        name: business?.name ?? "",
-      });
+      form.reset({ name: business?.name ?? "" });
     }
   }, [isOpen, form, business]);
 
-  const createBusinessAction = useAction(createBusiness, {
-    onSuccess: () => {
-      toast.success("Empresa criada com sucesso.");
-      onSuccess?.();
-    },
-    onError: ({ error }) => {
-      toast.error(error.serverError || "Erro ao criar empresa.");
-    },
-  });
-
+  // Server action para atualizar empresa
   const updateBusinessAction = useAction(updateBusiness, {
     onSuccess: () => {
       toast.success("Empresa atualizada com sucesso.");
@@ -88,29 +70,20 @@ const UpsertBusinessForm = ({
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    if (business?.id) {
-      updateBusinessAction.execute({
-        ...values,
-        id: business.id,
-      });
-    } else {
-      createBusinessAction.execute(values);
-    }
+    if (!business?.id) return;
+
+    updateBusinessAction.execute({
+      id: business.id,
+      ...values,
+    });
   };
 
-  const isLoading =
-    createBusinessAction.isExecuting || updateBusinessAction.isExecuting;
-
   return (
-    <DialogContent className="sm:max-w-[400px]">
+    <DialogContent>
       <DialogHeader>
-        <DialogTitle>
-          {business ? "Editar empresa" : "Nova empresa"}
-        </DialogTitle>
+        <DialogTitle>Editar Empresa</DialogTitle>
         <DialogDescription>
-          {business
-            ? "Edite as informações da sua empresa."
-            : "Crie uma nova empresa para gerenciar."}
+          Atualize as informações da sua empresa.
         </DialogDescription>
       </DialogHeader>
       <Form {...form}>
@@ -128,18 +101,17 @@ const UpsertBusinessForm = ({
               </FormItem>
             )}
           />
+          <DialogFooter>
+            <Button
+              type="submit"
+              disabled={updateBusinessAction.isExecuting}
+              className="w-full"
+            >
+              {updateBusinessAction.isExecuting ? "Salvando..." : "Salvar"}
+            </Button>
+          </DialogFooter>
         </form>
       </Form>
-      <DialogFooter>
-        <Button
-          form="form"
-          type="submit"
-          onClick={form.handleSubmit(onSubmit)}
-          disabled={isLoading}
-        >
-          {business ? "Atualizar" : "Criar"} empresa
-        </Button>
-      </DialogFooter>
     </DialogContent>
   );
 };
