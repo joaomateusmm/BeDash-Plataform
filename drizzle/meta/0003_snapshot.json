@@ -93,12 +93,8 @@
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -171,12 +167,8 @@
           "name": "appointments_clinic_id_clinics_id_fk",
           "tableFrom": "appointments",
           "tableTo": "clinics",
-          "columnsFrom": [
-            "clinic_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["clinic_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -184,12 +176,8 @@
           "name": "appointments_patient_id_clientes_id_fk",
           "tableFrom": "appointments",
           "tableTo": "clientes",
-          "columnsFrom": [
-            "patient_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["patient_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -197,12 +185,8 @@
           "name": "appointments_doctor_id_profissionais_id_fk",
           "tableFrom": "appointments",
           "tableTo": "profissionais",
-          "columnsFrom": [
-            "doctor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["doctor_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -276,12 +260,8 @@
           "name": "clientes_clinic_id_clinics_id_fk",
           "tableFrom": "clientes",
           "tableTo": "clinics",
-          "columnsFrom": [
-            "clinic_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["clinic_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -382,12 +362,8 @@
           "name": "funcoes_clinic_id_clinics_id_fk",
           "tableFrom": "funcoes",
           "tableTo": "clinics",
-          "columnsFrom": [
-            "clinic_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["clinic_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -478,12 +454,8 @@
           "name": "profissionais_clinic_id_clinics_id_fk",
           "tableFrom": "profissionais",
           "tableTo": "clinics",
-          "columnsFrom": [
-            "clinic_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["clinic_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -524,12 +496,8 @@
           "name": "profissionais_to_funcoes_profissional_id_profissionais_id_fk",
           "tableFrom": "profissionais_to_funcoes",
           "tableTo": "profissionais",
-          "columnsFrom": [
-            "profissional_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profissional_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -537,12 +505,8 @@
           "name": "profissionais_to_funcoes_funcao_id_funcoes_id_fk",
           "tableFrom": "profissionais_to_funcoes",
           "tableTo": "funcoes",
-          "columnsFrom": [
-            "funcao_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["funcao_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -612,12 +576,8 @@
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -627,9 +587,7 @@
         "sessions_token_unique": {
           "name": "sessions_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -728,9 +686,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -774,12 +730,8 @@
           "name": "users_to_clinics_user_id_users_id_fk",
           "tableFrom": "users_to_clinics",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -787,12 +739,8 @@
           "name": "users_to_clinics_clinic_id_clinics_id_fk",
           "tableFrom": "users_to_clinics",
           "tableTo": "clinics",
-          "columnsFrom": [
-            "clinic_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["clinic_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -857,20 +805,12 @@
     "public.patient_sex": {
       "name": "patient_sex",
       "schema": "public",
-      "values": [
-        "male",
-        "female"
-      ]
+      "values": ["male", "female"]
     },
     "public.plan_type": {
       "name": "plan_type",
       "schema": "public",
-      "values": [
-        "essential_trial",
-        "essential",
-        "professional",
-        "enterprise"
-      ]
+      "values": ["basico_trial", "basico", "professional", "enterprise"]
     }
   },
   "schemas": {},

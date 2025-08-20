@@ -24,23 +24,28 @@ interface DailyAppointment {
 }
 
 interface AppointmentsChartProps {
-  dailyAppointmentsData?: DailyAppointment[];
+  appointmentsPerDay: { date: string; appointments: number; revenue: number }[];
 }
 
 const AppointmentsChart = ({
-  dailyAppointmentsData = [],
+  appointmentsPerDay = [],
 }: AppointmentsChartProps) => {
-  // Gerar 21 dias: 10 antes + hoje + 10 depois
-  const chartDays = Array.from({ length: 21 }).map((_, i) =>
+  // Debug temporário
+  console.log("Dados recebidos:", appointmentsPerDay);
+
+  // Gerar 31 dias: 15 antes + hoje + 15 depois
+  const chartDays = Array.from({ length: 31 }).map((_, i) =>
     dayjs()
-      .subtract(10 - i, "days")
+      .subtract(15 - i, "days")
       .format("YYYY-MM-DD"),
   );
 
   const chartData = chartDays.map((date) => {
-    const dataForDay = dailyAppointmentsData?.find(
-      (item) => item.date === date,
+    const dataForDay = appointmentsPerDay?.find(
+      (item: { date: string; appointments: number; revenue: number }) =>
+        item.date === date,
     );
+
     return {
       date: dayjs(date).format("DD/MM"),
       fullDate: date,
@@ -67,7 +72,7 @@ const AppointmentsChart = ({
         <CardTitle>Agendamentos e Faturamento</CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px]">
+        <ChartContainer config={chartConfig} className="h-[550px] w-full">
           <AreaChart
             data={chartData}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}

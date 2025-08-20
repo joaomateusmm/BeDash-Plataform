@@ -32,7 +32,7 @@ export const createStripeCheckout = actionClient.action(async () => {
     },
     line_items: [
       {
-        price: process.env.STRIPE_ESSENTIAL_PLAN_PRICE_ID,
+        price: process.env.STRIPE_BASICO_PLAN_PRICE_ID,
         quantity: 1,
       },
     ],

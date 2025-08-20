@@ -8,22 +8,23 @@ const menuPrincipalItems = [
   { title: "Profissionais", url: "/profissionais" },
   { title: "Clientes", url: "/clientes" },
   { title: "Funções", url: "/funcoes" },
+  { title: "Gerenciar", url: "/gerenciar" },
 ];
 
-const outrosItems = [
-  { title: "Assinatura", url: "/subscription" }
-];
+const outrosItems = [{ title: "Assinatura", url: "/subscription" }];
 
 export function PageBreadcrumb() {
   const pathname = usePathname();
-  
+
   // Verificar em qual grupo a página atual está
-  const menuPrincipalItem = menuPrincipalItems.find(item => pathname.startsWith(item.url));
-  const outrosItem = outrosItems.find(item => pathname.startsWith(item.url));
-  
+  const menuPrincipalItem = menuPrincipalItems.find((item) =>
+    pathname.startsWith(item.url),
+  );
+  const outrosItem = outrosItems.find((item) => pathname.startsWith(item.url));
+
   let groupName = "";
   let pageTitle = "";
-  
+
   if (menuPrincipalItem) {
     groupName = "Menu Principal";
     pageTitle = menuPrincipalItem.title;
@@ -37,7 +38,12 @@ export function PageBreadcrumb() {
 
   return (
     <div className="flex items-center">
-      <p className="text-muted-foreground text-sm">{groupName} <a className="text-sm text-purple-500 font-medium">{'>'} {pageTitle}</a></p>
+      <p className="text-muted-foreground text-sm">
+        {groupName}{" "}
+        <a className="text-sm font-medium text-purple-500">
+          {">"} {pageTitle}
+        </a>
+      </p>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
 import { setupUserTrial } from "@/actions/setup-user-trial";
+import { TrialNotificationBanner } from "./components/trial-notification-banner";
 
 export default async function ProtectedLayout({ children }: PropsWithChildren) {
   const session = await auth.api.getSession({
@@ -17,5 +18,10 @@ export default async function ProtectedLayout({ children }: PropsWithChildren) {
   // Configurar trial automaticamente para usuários novos
   await setupUserTrial();
 
-  return <>{children}</>;
+  return (
+    <>
+      <TrialNotificationBanner />
+      {children}
+    </>
+  );
 }

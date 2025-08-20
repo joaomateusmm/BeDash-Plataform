@@ -12,8 +12,8 @@ import {
 
 // Enum para planos de assinatura
 export const planEnum = pgEnum("plan_type", [
-  "essential_trial",
-  "essential",
+  "basico_trial",
+  "basico",
   "professional",
   "enterprise",
 ]);

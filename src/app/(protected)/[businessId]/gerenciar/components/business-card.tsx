@@ -157,7 +157,7 @@ const BusinessCard = ({ business }: BusinessCardProps) => {
               </div>
               <Badge
                 variant={
-                  business.stats.subscription.toLowerCase() === "essential"
+                  business.stats.subscription.toLowerCase() === "Básico"
                     ? "default"
                     : "secondary"
                 }

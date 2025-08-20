@@ -16,6 +16,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { clinicsTable } from "@/db/schema";
 import { getBusinessStats } from "@/actions/get-business-stats";
+import AddBusinessButton from "./components/add-business-button";
+import { PageBreadcrumb } from "@/components/page-breadcrumb";
 
 type BusinessWithStats = typeof clinicsTable.$inferSelect & {
   _count: {
@@ -72,6 +74,7 @@ const GerenciarPage = ({ params }: GerenciarPageProps) => {
 
   return (
     <PageContainer>
+      <PageBreadcrumb />
       <PageHeader>
         <PageHeaderContent>
           <PageTitle>Gerenciar Empresa</PageTitle>
@@ -81,8 +84,7 @@ const GerenciarPage = ({ params }: GerenciarPageProps) => {
           </PageDescription>
         </PageHeaderContent>
         <PageActions>
-          {/* TODO: Criar AddBusinessButton component */}
-          <div>Adicionar Empresa</div>
+          <AddBusinessButton clientes={[]} profissionais={[]} />
         </PageActions>
       </PageHeader>
 

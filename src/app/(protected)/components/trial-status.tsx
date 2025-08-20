@@ -41,7 +41,7 @@ export async function TrialStatus() {
   const daysRemaining = trialStatus.daysRemaining;
 
   return (
-    <Card className="border-orange-200 bg-orange-50">
+    <Card className="border-purple-200 bg-purple-50">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium">Trial Ativo</CardTitle>
@@ -50,7 +50,7 @@ export async function TrialStatus() {
           </Badge>
         </div>
         <CardDescription className="text-xs">
-          Aproveite todos os recursos do plano Essential gratuitamente
+          Aproveite todos os recursos do plano Básicoitamente
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-0">

@@ -135,7 +135,7 @@ export const getUserBusinesses = async (activeBusinessId?: string) => {
         stats: {
           totalRevenue,
           monthlyRevenue,
-          subscription: "Essential", // Por enquanto fixo, depois pode vir do banco
+          subscription: "Basico", // Por enquanto fixo, depois pode vir do banco
         },
       };
     }),

@@ -64,13 +64,13 @@ export function SubscriptionPlan({
     <Card className={className}>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold text-gray-900">Essential</h3>
+          <h3 className="text-2xl font-bold text-gray-900">Básico</h3>
           {active ? (
-            <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-200 duration-200 cursor-default">
+            <Badge className="cursor-default bg-purple-100 text-purple-700 duration-200 hover:bg-purple-200">
               Atual
             </Badge>
           ) : (
-            <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-200 duration-200 cursor-default">
+            <Badge className="cursor-default bg-gray-100 text-gray-700 duration-200 hover:bg-gray-200">
               Não Possui
             </Badge>
           )}
@@ -96,26 +96,25 @@ export function SubscriptionPlan({
         </div>
 
         <div className="mt-8">
-            {createStripeCheckoutAction.isExecuting ? (
-              <Loader2 className="mr-1 h-4 w-4 animate-spin flex items-center justify-center" />
-            ) : active ? (
-              <Button
-            className="w-full bg-purple-500 hover:bg-purple-600 duration-200 hover:scale-[1.02] cursor-pointer text-md py-6 drop-shadow-purple-600 shadow-lg"
-            onClick={active ? handleManagePlanClick : handleSubscribeClick}
-            disabled={createStripeCheckoutAction.isExecuting}
-          >
-            Gerenciar assinatura
-          </Button>
-            ) : (
-              <Button
-            className="w-full bg-green-500 hover:bg-green-600 duration-200 hover:scale-[1.02] cursor-pointer text-md py-6 drop-shadow-purple-400"
-            onClick={active ? handleManagePlanClick : handleSubscribeClick}
-            disabled={createStripeCheckoutAction.isExecuting}
-          >
-            Fazer Assinatura
-          </Button>
-            )}
-          
+          {createStripeCheckoutAction.isExecuting ? (
+            <Loader2 className="mr-1 flex h-4 w-4 animate-spin items-center justify-center" />
+          ) : active ? (
+            <Button
+              className="text-md w-full cursor-pointer bg-purple-500 py-6 shadow-lg drop-shadow-purple-600 duration-200 hover:scale-[1.02] hover:bg-purple-600"
+              onClick={active ? handleManagePlanClick : handleSubscribeClick}
+              disabled={createStripeCheckoutAction.isExecuting}
+            >
+              Gerenciar assinatura
+            </Button>
+          ) : (
+            <Button
+              className="text-md w-full cursor-pointer bg-green-500 py-6 drop-shadow-purple-400 duration-200 hover:scale-[1.02] hover:bg-green-600"
+              onClick={active ? handleManagePlanClick : handleSubscribeClick}
+              disabled={createStripeCheckoutAction.isExecuting}
+            >
+              Fazer Assinatura
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

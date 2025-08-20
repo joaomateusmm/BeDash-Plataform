@@ -73,7 +73,7 @@ export function getTrialDaysRemaining(user: UserWithTrial): number {
  */
 export function hasFullAccess(user: UserWithTrial): boolean {
   // Se tem plano pago e não está em trial
-  if (user.plan && user.plan !== "essential_trial" && !user.isInTrial) {
+  if (user.plan && user.plan !== "Básico_trial" && !user.isInTrial) {
     return true;
   }
 

@@ -13,6 +13,8 @@ import {
   Mail,
   Waypoints,
   Building2,
+  Settings,
+  Layers,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -58,6 +60,12 @@ const items = [
     version: "Alfa",
   },
   {
+    title: "Clientes",
+    url: "/clientes",
+    icon: UsersRound,
+    version: "Alfa",
+  },
+  {
     title: "Profissionais",
     url: "/profissionais",
     icon: Briefcase,
@@ -69,19 +77,19 @@ const items = [
     icon: Blocks,
     version: "Alfa",
   },
-  {
-    title: "Clientes",
-    url: "/clientes",
-    icon: UsersRound,
-    version: "Alfa",
-  },
 ];
 
 const itemsOutros = [
   {
-    title: "Assinatura",
+    title: "Assinaturas",
     url: "/subscription",
     icon: Gem,
+    version: "New",
+  },
+  {
+    title: "Planos",
+    url: "/planos",
+    icon: Layers,
     version: "New",
   },
 ];
@@ -249,7 +257,7 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel className="text-muted-foreground my-2 text-sm font-normal opacity-70">
-            Outros
+            Financeiro
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -258,7 +266,6 @@ export function AppSidebar() {
                   className="text-muted-foreground flex flex-row-reverse items-center gap-5 py-1 text-sm font-medium"
                   key={item.title}
                 >
-                  <BadgeNew />
                   <SidebarMenuButton
                     className="py-2 duration-300"
                     asChild

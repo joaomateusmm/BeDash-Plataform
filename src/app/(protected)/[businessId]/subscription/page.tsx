@@ -16,6 +16,7 @@ import { auth } from "@/lib/auth";
 
 import { SubscriptionPlan } from "./components/subscription-plan";
 import { TrialStatus } from "../../components/trial-status";
+import { PageBreadcrumb } from "@/components/page-breadcrumb";
 
 const SubscriptionPage = async () => {
   const session = await auth.api.getSession({
@@ -37,6 +38,7 @@ const SubscriptionPage = async () => {
 
   return (
     <PageContainer>
+      <PageBreadcrumb />
       <PageHeader>
         <PageHeaderContent>
           <PageTitle>Assinatura</PageTitle>
@@ -47,7 +49,7 @@ const SubscriptionPage = async () => {
       <PageContent>
         <SubscriptionPlan
           className="w-[350px]"
-          active={userPlan === "essential"}
+          active={userPlan === "basico"}
           userEmail={session.user.email}
         />
       </PageContent>

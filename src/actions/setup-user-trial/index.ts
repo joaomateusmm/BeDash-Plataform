@@ -36,7 +36,7 @@ export async function setupUserTrial(): Promise<boolean> {
     await db
       .update(usersTable)
       .set({
-        plan: "essential_trial",
+        plan: "basico_trial",
         isInTrial: true,
         trialStartDate,
         trialEndDate,

@@ -17,8 +17,9 @@ interface Params {
 }
 
 export const getDashboard = async ({ from, to, clinicId }: Params) => {
-  const chartStartDate = dayjs().subtract(10, "days").startOf("day").toDate();
-  const chartEndDate = dayjs().add(10, "days").endOf("day").toDate();
+  // Expandir o período do gráfico para incluir mais dados
+  const chartStartDate = dayjs().subtract(30, "days").startOf("day").toDate();
+  const chartEndDate = dayjs().add(30, "days").endOf("day").toDate();
   const [
     [totalRevenue],
     [totalAppointments],

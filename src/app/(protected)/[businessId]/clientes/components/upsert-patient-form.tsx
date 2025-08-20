@@ -80,11 +80,11 @@ const UpsertPatientForm = ({
 
   const upsertPatientAction = useAction(upsertPatient, {
     onSuccess: () => {
-      toast.success("Paciente salvo com sucesso.");
+      toast.success("Cliente salvo com sucesso.");
       onSuccess?.();
     },
     onError: () => {
-      toast.error("Erro ao salvar paciente.");
+      toast.error("Erro ao salvar cliente.");
     },
   });
 
@@ -99,12 +99,12 @@ const UpsertPatientForm = ({
     <DialogContent>
       <DialogHeader>
         <DialogTitle>
-          {patient ? patient.name : "Adicionar paciente"}
+          {patient ? patient.name : "Adicionar cliente"}
         </DialogTitle>
         <DialogDescription>
           {patient
-            ? "Edite as informações desse paciente."
-            : "Adicione um novo paciente."}
+            ? "Edite as informações desse cliente."
+            : "Adicione um novo cliente."}
         </DialogDescription>
       </DialogHeader>
       <Form {...form}>
@@ -114,10 +114,10 @@ const UpsertPatientForm = ({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome do paciente</FormLabel>
+                <FormLabel>Nome do cliente</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Digite o nome completo do paciente"
+                    placeholder="Digite o nome completo do cliente"
                     {...field}
                   />
                 </FormControl>

@@ -16,6 +16,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,6 +44,7 @@ import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { deleteFuncaoAction } from "@/actions/delete-funcao";
 import { UpsertFuncaoForm } from "./upsert-funcao-form";
+import { PageContent } from "@/components/ui/page-container";
 
 interface Funcao {
   id: string;
@@ -72,7 +75,7 @@ export function FuncoesTable({ funcoes }: FuncoesTableProps) {
       onError: ({ error }) => {
         toast.error(error.serverError || "Erro inesperado");
       },
-    }
+    },
   );
 
   const handleDelete = (id: string) => {
@@ -81,11 +84,30 @@ export function FuncoesTable({ funcoes }: FuncoesTableProps) {
 
   if (funcoes.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-muted-foreground">
-          Nenhuma função cadastrada ainda.
-        </p>
-      </div>
+      <PageContent>
+        {funcoes.length === 0 ? (
+          <div className="mt-20 flex flex-col items-center justify-center text-center">
+            <div className="mx-auto max-w-[450px]">
+              <Image
+                src="/illustrationNaoEncontrado.svg"
+                alt="Ilustração pessoa segurando um celular"
+                width={320}
+                height={320}
+                className="mx-auto mb-4 opacity-80"
+              />
+              <h3 className="mb-2 text-lg font-semibold text-gray-900 opacity-80">
+                Nenhuma função encontrada
+              </h3>
+              <p className="mb-6 text-gray-600 opacity-80">
+                Você ainda não possui funções adicionadas, crie funções para dar
+                aos seus funcionários mais controle e flexibilidade.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="hidden"></div>
+        )}
+      </PageContent>
     );
   }
 
@@ -108,9 +130,7 @@ export function FuncoesTable({ funcoes }: FuncoesTableProps) {
                 <TableCell className="font-medium">{funcao.name}</TableCell>
                 <TableCell>
                   {funcao.description || (
-                    <span className="text-muted-foreground">
-                      Sem descrição
-                    </span>
+                    <span className="text-muted-foreground">Sem descrição</span>
                   )}
                 </TableCell>
                 <TableCell>
@@ -173,7 +193,10 @@ export function FuncoesTable({ funcoes }: FuncoesTableProps) {
         </Table>
       </div>
 
-      <Dialog open={!!editingFuncao} onOpenChange={() => setEditingFuncao(null)}>
+      <Dialog
+        open={!!editingFuncao}
+        onOpenChange={() => setEditingFuncao(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar Função</DialogTitle>

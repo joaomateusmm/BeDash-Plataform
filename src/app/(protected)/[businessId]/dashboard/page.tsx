@@ -89,23 +89,14 @@ const DashboardPage = async ({ params, searchParams }: DashboardPageProps) => {
             totalclientes={dashboardData.totalclientes.total}
             totalprofissionais={dashboardData.totalprofissionais.total}
           />
+          <div>
+            <AppointmentsChart
+              appointmentsPerDay={dashboardData.dailyAppointmentsData}
+            />
+          </div>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-base font-normal">
-                  Agendamentos por Dia
-                </CardTitle>
-                <Calendar className="text-muted-foreground h-4 w-4" />
-              </CardHeader>
-              <CardContent className="pl-2">
-                <AppointmentsChart
-                  appointmentsPerDay={dashboardData.dailyAppointmentsData}
-                />
-              </CardContent>
-            </Card>
-
-            <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-1">
+            <div className="flex gap-6">
               <Topprofissionais
                 profissionais={dashboardData.topprofissionais}
               />

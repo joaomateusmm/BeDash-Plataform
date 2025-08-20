@@ -2,6 +2,8 @@
 
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
+import { actionClient } from "@/lib/next-safe-action";
+import { z } from "zod";
 
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
@@ -15,10 +17,12 @@ export interface AccessLevel {
   plan?: string | null;
 }
 
+const checkUserAccessSchema = z.object({});
+
 /**
  * Verifica se o usuário tem acesso a recursos premium
  */
-export async function checkUserAccess(): Promise<AccessLevel> {
+async function checkUserAccessHandler(): Promise<AccessLevel> {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -45,7 +49,7 @@ export async function checkUserAccess(): Promise<AccessLevel> {
     }
 
     const hasAccess = hasFullAccess(userData);
-    const isTrialUser = userData.plan === "essential_trial";
+    const isTrialUser = userData.plan === "basico_trial";
 
     return {
       hasAccess,
@@ -64,3 +68,7 @@ export async function checkUserAccess(): Promise<AccessLevel> {
     };
   }
 }
+
+export const checkUserAccess = actionClient
+  .schema(checkUserAccessSchema)
+  .action(checkUserAccessHandler);

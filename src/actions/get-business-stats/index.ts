@@ -134,7 +134,7 @@ export const getBusinessStats = actionClient
       stats: {
         totalRevenue,
         monthlyRevenue,
-        subscription: "Essential", // Por enquanto fixo, depois pode vir do banco
+        subscription: "Basico", // Por enquanto fixo, depois pode vir do banco
       },
     };
   });
