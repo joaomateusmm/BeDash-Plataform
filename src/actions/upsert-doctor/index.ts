@@ -7,10 +7,15 @@ import { headers } from "next/headers";
 import { eq, count } from "drizzle-orm";
 
 import { db } from "@/db";
-import { profissionaisTable, profissionaisToFuncoesTable } from "@/db/schema";
+import {
+  profissionaisTable,
+  profissionaisToFuncoesTable,
+  usersTable,
+} from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 import { localTimeToUtc } from "@/helpers/timezone";
+import { getPlanInfo } from "@/helpers/plan-info";
 
 import { upsertprofissionaischema } from "./schema";
 
@@ -33,18 +38,30 @@ export const upsertDoctor = actionClient
 
     // Verificar limite de profissionais antes de criar um novo
     if (!profissionalData.id) {
+      // Buscar o plano do usuário
+      const userData = await db.query.usersTable.findFirst({
+        where: eq(usersTable.id, session.user.id),
+      });
+
+      const userPlan = userData?.plan || "basico_trial";
+      const planInfo = getPlanInfo(userPlan);
+
       const [currentCount] = await db
         .select({ count: count() })
         .from(profissionaisTable)
         .where(eq(profissionaisTable.clinicId, session.user.clinic.id));
 
-      const maxDoctors = 10; // Limite do plano básico
+      // Verificar se tem limite (não é ilimitado)
+      if (typeof planInfo.limits.professionals === "number") {
+        const maxDoctors = planInfo.limits.professionals;
 
-      if (currentCount.count >= maxDoctors) {
-        throw new Error(
-          `Limite de ${maxDoctors} profissionais atingido. Faça upgrade do seu plano para adicionar mais profissionais.`,
-        );
+        if (currentCount.count >= maxDoctors) {
+          throw new Error(
+            `Limite de ${maxDoctors} profissionais atingido para o plano ${planInfo.name}. Faça upgrade do seu plano para adicionar mais profissionais.`,
+          );
+        }
       }
+      // Se for "unlimited", não faz verificação
     }
 
     // Converter horários locais para UTC para salvar no banco

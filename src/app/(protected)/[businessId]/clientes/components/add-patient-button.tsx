@@ -18,7 +18,7 @@ const AddPatientButton = () => {
     if (monitor.isAtLimit("currentClients")) {
       toast.error("Limite de clientes atingido", {
         description:
-          "Você atingiu o limite de 100 clientes do plano básico. Faça upgrade para adicionar mais clientes.",
+          "Você atingiu o limite de clientes do seu plano atual. Faça upgrade para adicionar mais clientes.",
       });
       return;
     }

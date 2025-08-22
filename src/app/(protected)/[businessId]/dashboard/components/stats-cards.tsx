@@ -1,8 +1,9 @@
 import {
-    Briefcase,
+  Briefcase,
   CalendarIcon,
   DollarSignIcon,
   UsersRound,
+  Blocks,
 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +14,7 @@ interface StatsCardsProps {
   totalAppointments: number;
   totalclientes: number;
   totalprofissionais: number;
+  totalfuncoes: number;
 }
 
 const StatsCards = ({
@@ -20,6 +22,7 @@ const StatsCards = ({
   totalAppointments,
   totalclientes,
   totalprofissionais,
+  totalfuncoes,
 }: StatsCardsProps) => {
   const stats = [
     {
@@ -42,10 +45,15 @@ const StatsCards = ({
       value: totalprofissionais.toString(),
       icon: Briefcase,
     },
+    {
+      title: "Funções",
+      value: totalfuncoes.toString(),
+      icon: Blocks,
+    },
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (

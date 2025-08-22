@@ -13,12 +13,17 @@ import {
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
-
-import { SubscriptionPlan } from "./components/subscription-plan";
-import { TrialStatus } from "../../components/trial-status";
 import { PageBreadcrumb } from "@/components/page-breadcrumb";
+import { TrialStatus } from "../../components/trial-status";
 
-const SubscriptionPage = async () => {
+import { PricingSection } from "./components/pricing-section";
+
+const SubscriptionPage = async ({
+  params,
+}: {
+  params: Promise<{ businessId: string }>;
+}) => {
+  const { businessId } = await params;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -41,16 +46,18 @@ const SubscriptionPage = async () => {
       <PageBreadcrumb />
       <PageHeader>
         <PageHeaderContent>
-          <PageTitle>Assinatura</PageTitle>
-          <PageDescription>Gerencie a sua assinatura.</PageDescription>
-          <TrialStatus />
+          <PageTitle>Planos de Assinatura</PageTitle>
+          <PageDescription>
+            Escolha o plano ideal para sua empresa e potencialize seus
+            resultados.
+          </PageDescription>
         </PageHeaderContent>
       </PageHeader>
       <PageContent>
-        <SubscriptionPlan
-          className="w-[350px]"
-          active={userPlan === "basico"}
+        <PricingSection
+          userPlan={userPlan}
           userEmail={session.user.email}
+          businessId={businessId}
         />
       </PageContent>
     </PageContainer>

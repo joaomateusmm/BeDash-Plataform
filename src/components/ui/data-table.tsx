@@ -170,11 +170,17 @@ export const columns: ColumnDef<Payment>[] = [
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onRowSelectionChange?: (selection: Record<string, boolean>) => void;
+  rowSelection?: Record<string, boolean>;
+  onTableInstanceChange?: (table: any) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onRowSelectionChange,
+  rowSelection = {},
+  onTableInstanceChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -182,7 +188,6 @@ export function DataTable<TData, TValue>({
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -194,7 +199,16 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: onRowSelectionChange
+      ? (selection) => {
+          if (typeof selection === "function") {
+            onRowSelectionChange(selection(rowSelection));
+          } else {
+            onRowSelectionChange(selection);
+          }
+        }
+      : undefined,
+    getRowId: (row: any) => row.id,
     state: {
       sorting,
       columnFilters,
@@ -203,13 +217,17 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  // Passar instância da tabela para o componente pai
+  React.useEffect(() => {
+    if (onTableInstanceChange) {
+      onTableInstanceChange(table);
+    }
+  }, [table, onTableInstanceChange]);
+
   // Find the first text column for global filter
   const firstTextColumn = table.getAllColumns().find((column) => {
     const columnId = column.id.toLowerCase();
-    return (
-      columnId.includes("name") ||
-      columnId.includes("email")
-    );
+    return columnId.includes("name") || columnId.includes("email");
   });
 
   return (
@@ -258,7 +276,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="text-muted-foreground bg-purple-100 uppercase"
+                className="text-muted-foreground bg-muted/50 uppercase"
               >
                 {headerGroup.headers.map((header) => {
                   return (

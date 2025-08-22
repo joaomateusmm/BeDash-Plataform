@@ -14,8 +14,8 @@ import {
 export const planEnum = pgEnum("plan_type", [
   "basico_trial",
   "basico",
-  "professional",
-  "enterprise",
+  "profissional",
+  "avancado",
 ]);
 
 export const usersTable = pgTable("users", {

@@ -1,0 +1,111 @@
+Lista de ideias de gráficos para a Dashboard
+
+Instruções: cada item traz título, tipo, por que é útil (visão de negócio), dados necessários e sugestões de filtros/intervalos.
+
+1) Tendência de Faturamento vs Agendamentos (Dual-axis Area)
+- Tipo: Área com eixo Y duplo (faturamento à direita, agendamentos à esquerda)
+- Por que: mostra receita e volume juntos para entender se aumento de clientes resulta em mais faturamento ou apenas preço médio maior
+- Dados: date, total_revenue (cents), total_appointments
+- Filtros: período (7d/30d/90d/ano), clínica, profissional
+
+2) Ticket Médio Diário (Single value + Sparkline)
+- Tipo: Indicador com mini-gráfico (sparkline)
+- Por que: indicador simples que mostra quanto, em média, a clínica ganha por agendamento — útil para decisões de preço e promoções
+- Dados: date, total_revenue, total_appointments (calcula revenue/appointments)
+- Filtros: período, plano de pagamento (avulso/convênio)
+
+3) Conversão de Agendamento (Funnel)
+- Tipo: Funil (views → contatos → agendamentos → comparecimentos)
+- Por que: identifica perdas no processo de captação e onde otimizar (ex: formulário, chamada)
+- Dados: impressions/visits, leads/contacts, bookings, attendances
+- Filtros: campanha, fonte (orgânico, tráfego pago), período
+
+4) Receita por Especialidade (Horizontal Bar)
+- Tipo: Barra horizontal (ordenada)
+- Por que: mostra quais especialidades trazem mais receita para alocar recursos e promoção
+- Dados: specialty, total_revenue, appointments
+- Filtros: período, profissional
+
+5) Heatmap: Horários com Mais Agendamentos (Heatmap calendar)
+- Tipo: Heatmap diário/horário (dias x horas)
+- Por que: otimiza escala de profissionais e horários de abertura, identifica janelas de alta demanda
+- Dados: date, hour, appointments_count
+- Filtros: período, clínica, sala
+
+6) Clientes Recorrentes vs Novos (Stacked Bar ou Donut + Trend)
+- Tipo: Stacked bar por período + indicador percentual
+- Por que: avalia retenção e necessidade de aquisição de novos clientes
+- Dados: date, new_clients_count, returning_clients_count, total_clients
+- Filtros: período, origem do cliente
+
+7) Taxa de No-show / Cancelamento (Line with goal band)
+- Tipo: Linha com banda de meta (meta < X%)
+- Por que: importante para medir eficiência operacional e perda de receitas
+- Dados: date, cancellations_count, no_shows_count, total_bookings
+- Filtros: período, motivos de cancelamento
+
+8) Mapa de Receita por Localidade (Choropleth / Bubble map)
+- Tipo: Mapa (estado/cidade) com bolhas ou intensidade por receita
+- Por que: útil para redes/clinicas com múltiplas unidades para decisões de expansão
+- Dados: city/state, total_revenue, appointments
+- Filtros: período, unidade
+
+9) Churn de Planos (Cohort / Sankey)
+- Tipo: Gráfico de coorte ou Sankey mostrando migração entre planos
+- Por que: entender upgrade/downgrade/cancelamento por coorte (mês de aquisição)
+- Dados: customer_id, signup_date, plan_history (timestamps)
+- Filtros: coorte por mês, segmento de cliente
+
+10) Tempo Médio de Atendimento (Boxplot + Histogram)
+- Tipo: Boxplot por profissional + histograma
+- Por que: identifica variação e outliers no tempo de consulta — otimização de agendas
+- Dados: appointment_id, professional_id, duration_minutes
+- Filtros: especialidade, período
+
+11) Performance por Profissional (Small Multiples de Barras)
+- Tipo: Múltiplos mini-gráficos (revenue, appointments, avg ticket)
+- Por que: compara performance de profissionais lado a lado sem poluir a view principal
+- Dados: professional_id, total_revenue, appointments, avg_ticket
+- Filtros: período, unidade
+
+12) Tendência de Pagamentos em Atraso e Falhas (Area + Event markers)
+- Tipo: Área com marcações de eventos (picos de falhas/pagamentos)
+- Por que: rastrear problemas de cobrança e correlacionar com churn
+- Dados: date, failed_payments_count, invoices_due, invoices_paid
+- Filtros: período, gateway (Stripe)
+
+13) Indicador de Utilização de Limites por Plano (Gauge / Donut)
+- Tipo: Gauge por recurso (ex: pacientes, profissionais, salas)
+- Por que: dá visão rápida se um cliente está próximo do limite do plano e precisa upgrade
+- Dados: resource_used, resource_limit, plan_type
+- Filtros: cliente, plano
+
+14) Análise de Receita por Canal de Aquisição (Treemap ou Stacked Bar)
+- Tipo: Treemap ou barras empilhadas por canal (Google, Orgânico, Indicação, Telefone)
+- Por que: entender aquisição rentável e custo de CAC
+- Dados: channel, total_revenue, customers_acquired
+- Filtros: período, campanha
+
+15) Previsão Rápida de Faturamento (Forecast line)
+- Tipo: Linha com previsão (simple linear or moving average) e intervalo de confiança
+- Por que: ajuda o dono a tomar decisões de caixa e marketing para próximas semanas
+- Dados: historical_daily_revenue, model (rolling avg)
+- Filtros: horizonte (7/30 dias)
+
+Sugestões de UX e filtros globais:
+- Permitir selecionar unidade/clinic, profissional e período no topo da dashboard.
+- Quick presets: Hoje, Próximos 7 dias, Últimos 30 dias, Últimos 3 meses, Ano.
+- Hover tooltips com valores formatados e comparação com período anterior (▲/▼ %).
+- Opção de exportar dados (CSV / Excel) do gráfico.
+
+Prioridade (recomendada para 1a tela):
+1. Tendência de Faturamento vs Agendamentos (dual-axis)
+2. Ticket Médio Diário (indicator)
+3. Heatmap horários (otimização de agenda)
+4. Receita por Especialidade
+5. Performance por Profissional (small multiples)
+
+Observação final: a escolha depende do público-alvo (dono vs operador). Para dono/admin priorize visão consolidada e KPIs (1,2,3). Para operações, foque em utilização, tempo médio e no-shows (5,10,6).
+
+---
+Arquivo gerado por solicitação do time — `docs/DASHBOARD_GRAPH_IDEAS.txt`

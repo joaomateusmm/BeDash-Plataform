@@ -25,6 +25,7 @@ export const getDashboard = async ({ from, to, clinicId }: Params) => {
     [totalAppointments],
     [totalclientes],
     [totalprofissionais],
+    [totalfuncoes],
     topprofissionais,
     topFuncoes,
     topClientes,
@@ -68,6 +69,12 @@ export const getDashboard = async ({ from, to, clinicId }: Params) => {
       })
       .from(profissionaisTable)
       .where(eq(profissionaisTable.clinicId, clinicId)),
+    db
+      .select({
+        total: count(),
+      })
+      .from(funcoesTable)
+      .where(eq(funcoesTable.clinicId, clinicId)),
     db
       .select({
         id: profissionaisTable.id,
@@ -194,6 +201,7 @@ export const getDashboard = async ({ from, to, clinicId }: Params) => {
     totalAppointments,
     totalclientes,
     totalprofissionais,
+    totalfuncoes,
     topprofissionais,
     topFuncoes,
     topClientes,

@@ -75,7 +75,7 @@ export function ChartRadarDots({ data }: ChartRadarDotsProps) {
             <PolarGrid />
             <Radar
               dataKey="appointments"
-              fill="var(--color-appointments)"
+              fill="var(--chart-5)"
               fillOpacity={0.6}
               dot={{
                 r: 4,

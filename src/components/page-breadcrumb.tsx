@@ -12,24 +12,21 @@ const pageCategories = {
     { title: "Funções", paths: ["/funcoes"] },
   ],
   Campanhas: [
-    { title: "Campanhas", paths: ["/campanhas", "/campaigns"] },
-    { title: "Email Marketing", paths: ["/email-marketing"] },
-    { title: "SMS", paths: ["/sms"] },
+    { title: "WhatsApp", paths: ["/campanhas", "/campaigns"] },
+    { title: "Email", paths: ["/email-marketing"] },
+    { title: "Personalizado", paths: ["/sms"] },
   ],
-  Empresa: [
-    {
-      title: "Configurações",
-      paths: ["/clinic-form", "/settings", "/configuracoes"],
-    },
-    { title: "Gerenciar", paths: ["/gerenciar"] },
-    { title: "Usuários", paths: ["/users", "/usuarios"] },
-    { title: "Permissões", paths: ["/permissions", "/permissoes"] },
-  ],
+  Empresa: [{ title: "Gerenciar", paths: ["/gerenciar"] }],
   Financeiro: [
     { title: "Assinatura", paths: ["/subscription", "/assinatura"] },
     { title: "Planos", paths: ["/planos", "/plans"] },
     { title: "Faturas", paths: ["/invoices", "/faturas"] },
-    { title: "Pagamentos", paths: ["/payments", "/pagamentos"] },
+  ],
+  Outros: [
+    { title: "Contato", paths: ["/contato"] },
+    { title: "Suporte", paths: ["/suporte"] },
+    { title: "Sobre", paths: ["/sobre"] },
+    { title: "Configurações", paths: ["/configuracoes"] },
   ],
 };
 

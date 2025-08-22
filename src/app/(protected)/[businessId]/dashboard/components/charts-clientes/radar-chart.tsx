@@ -33,7 +33,7 @@ interface ChartRadarDotsProps {
 const chartConfig = {
   appointments: {
     label: "Agendamentos",
-    color: "var(--chart-1)",
+    color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 

@@ -68,7 +68,7 @@ const AppointmentsChart = ({
   const [chartType, setChartType] = React.useState<"area" | "line" | "bar">(
     "area",
   );
-  const [timeRange, setTimeRange] = React.useState("90d");
+  const [timeRange, setTimeRange] = React.useState("7d-future");
   const [activeChart, setActiveChart] = React.useState<
     "appointments" | "revenue"
   >("appointments");
@@ -171,13 +171,13 @@ const AppointmentsChart = ({
                   formatter={(value, name) => {
                     if (name === "appointments") {
                       return (
-                        <span className="text-sm font-medium text-gray-800">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           Agend. {value}
                         </span>
                       );
                     } else if (name === "revenue") {
                       return (
-                        <span className="text-sm font-medium text-gray-800">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           Fatur. {formatCurrencyInCents(Number(value))}
                         </span>
                       );
@@ -227,13 +227,13 @@ const AppointmentsChart = ({
                   formatter={(value, name) => {
                     if (name === "appointments") {
                       return (
-                        <span className="text-sm font-medium text-gray-800">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           Agend. {value}
                         </span>
                       );
                     } else if (name === "revenue") {
                       return (
-                        <span className="text-sm font-medium text-gray-800">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           Fatur. {formatCurrencyInCents(Number(value))}
                         </span>
                       );
@@ -265,8 +265,10 @@ const AppointmentsChart = ({
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
-              right: 12,
+              left: 20,
+              right: 50,
+              top: 35,
+              bottom: 20,
             }}
           >
             <CartesianGrid vertical={false} />
@@ -277,6 +279,26 @@ const AppointmentsChart = ({
               tickMargin={8}
               minTickGap={32}
             />
+            <YAxis
+              yAxisId="appointments"
+              orientation="left"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              domain={[0, "dataMax + 20%"]}
+              tickFormatter={(value) => `${value}`}
+              width={40}
+            />
+            <YAxis
+              yAxisId="revenue"
+              orientation="right"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              domain={[0, "dataMax + 20%"]}
+              tickFormatter={(value) => `R$ ${(value / 100).toFixed(0)}`}
+              width={60}
+            />
             <ChartTooltip
               cursor={false}
               content={
@@ -284,13 +306,13 @@ const AppointmentsChart = ({
                   formatter={(value, name) => {
                     if (name === "revenue") {
                       return (
-                        <span className="text-sm font-medium text-gray-800">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           Fatur. {formatCurrencyInCents(Number(value))}
                         </span>
                       );
                     } else if (name === "appointments") {
                       return (
-                        <span className="text-sm font-medium text-gray-800">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                           Agend. {value}
                         </span>
                       );
@@ -309,35 +331,52 @@ const AppointmentsChart = ({
                     }
                     return value;
                   }}
-                  indicator="dot"
                 />
               }
             />
             <defs>
               <linearGradient id="fillAppointments" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#7F22FE" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#7F22FE" stopOpacity={0.1} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-appointments)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-appointments)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
               <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#10B981" stopOpacity={0.1} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-revenue)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-revenue)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
             </defs>
             <Area
+              yAxisId="appointments"
               dataKey="appointments"
               type="natural"
               fill="url(#fillAppointments)"
-              fillOpacity={0.4}
-              stroke="#7F22FE"
-              stackId="a"
+              fillOpacity={0.6}
+              stroke="var(--color-appointments)"
+              strokeWidth={2}
             />
             <Area
+              yAxisId="revenue"
               dataKey="revenue"
               type="natural"
               fill="url(#fillRevenue)"
               fillOpacity={0.4}
-              stroke="#10B981"
-              stackId="a"
+              stroke="var(--color-revenue)"
+              strokeWidth={2}
             />
           </AreaChart>
         );

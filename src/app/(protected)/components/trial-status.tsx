@@ -41,7 +41,7 @@ export async function TrialStatus() {
   const daysRemaining = trialStatus.daysRemaining;
 
   return (
-    <Card className="border-purple-200 bg-purple-50">
+    <Card className="border-primary/20 bg-primary/5 max-w-[350px]">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium">Trial Ativo</CardTitle>

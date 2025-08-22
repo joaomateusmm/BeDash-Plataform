@@ -6,6 +6,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { profissionaisTable, clientesTable } from "@/db/schema";
+import { useTrialMonitor } from "@/hooks/use-trial-monitor";
+import { toast } from "sonner";
 
 import AddAppointmentForm from "./add-appointment-form";
 
@@ -19,11 +21,26 @@ const AddAppointmentButton = ({
   profissionais,
 }: AddAppointmentButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const monitor = useTrialMonitor();
+
+  const handleOpenDialog = () => {
+    if (monitor.isAtLimit("currentAppointmentsThisMonth")) {
+      toast.error("Limite de agendamentos atingido", {
+        description:
+          "Você atingiu o limite de agendamentos mensais do seu plano atual. Faça upgrade para adicionar mais agendamentos.",
+      });
+      return;
+    }
+    setIsOpen(true);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button
+          onClick={handleOpenDialog}
+          disabled={monitor.isAtLimit("currentAppointmentsThisMonth")}
+        >
           <Plus className="mr-2 h-4 w-4" />
           Novo agendamento
         </Button>

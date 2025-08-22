@@ -1,15 +1,22 @@
 import { Suspense } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { TrialNotificationBanner } from "@/app/(protected)/components/trial-notification-banner";
-import { TrialLimitsProgress } from "@/app/(protected)/components/trial-limits-progress";
 import { TrialInfoCard } from "./components/trial-info-card";
+import { PlanLimitsProgress } from "./components/plan-limits-progress";
 import { PlanUpgradeSection } from "./components/plan-upgrade-section";
 import { PageBreadcrumb } from "@/components/page-breadcrumb";
 import { PageContainer } from "@/components/ui/page-container";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const userPlan = session?.user?.plan;
+
   return (
     <>
       <PageContainer>
@@ -28,24 +35,18 @@ export default function SettingsPage() {
 
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="space-y-6 lg:col-span-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Informações do Trial</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Suspense fallback={<Skeleton className="h-32 w-full" />}>
-                    <TrialInfoCard />
-                  </Suspense>
-                </CardContent>
-              </Card>
+              <Suspense fallback={<Skeleton className="h-32 w-full" />}>
+                <TrialInfoCard />
+              </Suspense>
+
               <Suspense fallback={<Skeleton className="h-40 w-full" />}>
-                <TrialLimitsProgress showDetails />
+                <PlanLimitsProgress userPlan={userPlan} />
               </Suspense>
             </div>
 
             <div className="space-y-6">
               <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-                <PlanUpgradeSection />
+                <PlanUpgradeSection userPlan={userPlan} />
               </Suspense>
             </div>
           </div>

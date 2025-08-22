@@ -215,7 +215,7 @@ const GerenciarPage = ({ params }: GerenciarPageProps) => {
                   <TrendingUp className="text-muted-foreground h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-primary text-2xl font-bold">
                     {formatCurrency(businessData.stats.monthlyRevenue)}
                   </div>
                   <p className="text-muted-foreground text-xs">
@@ -294,13 +294,13 @@ const GerenciarPage = ({ params }: GerenciarPageProps) => {
                       <span className="text-muted-foreground text-sm">
                         Receita por Agendamento
                       </span>
-                      <span className="font-semibold text-blue-600">
+                      <span className="text-primary font-semibold">
                         {formatCurrency(metrics?.avgRevenuePerAppointment || 0)}
                       </span>
                     </div>
                     <div className="bg-muted h-2 rounded-full">
                       <div
-                        className="h-2 rounded-full bg-blue-500"
+                        className="bg-primary h-2 rounded-full"
                         style={{
                           width: `${Math.min(((metrics?.avgRevenuePerAppointment || 0) / 200) * 100, 100)}%`,
                         }}
@@ -313,7 +313,7 @@ const GerenciarPage = ({ params }: GerenciarPageProps) => {
                       <span className="text-muted-foreground text-sm">
                         Agendamentos por Profissional
                       </span>
-                      <span className="font-semibold text-purple-600">
+                      <span className="text-primary font-semibold">
                         {Math.round(
                           metrics?.avgAppointmentsPerProfessional || 0,
                         )}
@@ -321,7 +321,7 @@ const GerenciarPage = ({ params }: GerenciarPageProps) => {
                     </div>
                     <div className="bg-muted h-2 rounded-full">
                       <div
-                        className="h-2 rounded-full bg-purple-500"
+                        className="bg-primary h-2 rounded-full"
                         style={{
                           width: `${Math.min(((metrics?.avgAppointmentsPerProfessional || 0) / 50) * 100, 100)}%`,
                         }}
@@ -350,26 +350,26 @@ const GerenciarPage = ({ params }: GerenciarPageProps) => {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between rounded-lg bg-blue-50 p-3">
+                    <div className="bg-primary/5 flex items-center justify-between rounded-lg p-3">
                       <span className="text-sm font-medium">
                         Eficiência da Equipe
                       </span>
-                      <Badge variant="secondary">
+                      <Badge variant="outline">
                         {Math.round(metrics?.efficiency || 0)}%
                       </Badge>
                     </div>
 
-                    <div className="flex items-center justify-between rounded-lg bg-green-50 p-3">
+                    <div className="flex items-center justify-between rounded-lg bg-green-500/5 p-3">
                       <span className="text-sm font-medium">
                         Engajamento por Cliente
                       </span>
-                      <Badge variant="default">
+                      <Badge variant="outline">
                         {(metrics?.avgAppointmentsPerClient || 0).toFixed(1)}{" "}
                         agend.
                       </Badge>
                     </div>
 
-                    <div className="flex items-center justify-between rounded-lg bg-purple-50 p-3">
+                    <div className="bg-muted/50 flex items-center justify-between rounded-lg p-3">
                       <span className="text-sm font-medium">Ticket Médio</span>
                       <Badge variant="outline">
                         {formatCurrency(metrics?.avgRevenuePerAppointment || 0)}

@@ -21,8 +21,8 @@ import StatsCards from "./components/stats-cards";
 import Topprofissionais from "./components/top-profissionais";
 import TopSpecialties from "./components/top-specialties";
 import { PageBreadcrumb } from "@/components/page-breadcrumb";
-import { RankingDaysChart } from "./components/ranking-days-chart";
 import { ClientsInteractingChart } from "./components/clients-interacting-chart";
+import { SubscriptionCard } from "@/components/subscription-card";
 
 interface DashboardPageProps {
   params: Promise<{
@@ -52,7 +52,7 @@ const DashboardPage = async ({ params, searchParams }: DashboardPageProps) => {
 
   if (!from || !to) {
     redirect(
-      `/${businessId}/dashboard?from=${dayjs().format("YYYY-MM-DD")}&to=${dayjs().add(1, "month").format("YYYY-MM-DD")}`,
+      `/${businessId}/dashboard?from=${dayjs().format("YYYY-MM-DD")}&to=${dayjs().add(7, "day").format("YYYY-MM-DD")}`,
     );
   }
 
@@ -85,6 +85,7 @@ const DashboardPage = async ({ params, searchParams }: DashboardPageProps) => {
             totalAppointments={dashboardData.totalAppointments.total}
             totalclientes={dashboardData.totalclientes.total}
             totalprofissionais={dashboardData.totalprofissionais.total}
+            totalfuncoes={dashboardData.totalfuncoes.total}
           />
           <div>
             <AppointmentsChart

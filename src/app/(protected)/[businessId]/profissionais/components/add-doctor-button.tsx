@@ -28,10 +28,11 @@ const AddDoctorButton = ({ funcoes }: AddDoctorButtonProps) => {
   const monitor = useTrialMonitor();
 
   const handleOpenDialog = () => {
+    // Com o monitor atualizado, agora ele considera os limites corretos do plano
     if (monitor.isAtLimit("currentDoctors")) {
       toast.error("Limite de profissionais atingido", {
         description:
-          "Você atingiu o limite de 10 profissionais do plano básico. Faça upgrade para adicionar mais profissionais.",
+          "Você atingiu o limite de profissionais do seu plano atual. Faça upgrade para adicionar mais profissionais.",
       });
       return;
     }
